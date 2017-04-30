@@ -1,0 +1,52 @@
+{
+  "generator-wupjs": {
+    "devDeps": {
+      "gulp": "git://github.com/gulpjs/gulp.git#4.0",
+      "plumb-gulp": "*",
+      "autoreload-gulp": "*",
+      "gulp-sourcemaps": "*",
+      "del": "*",
+      "gulp-rename": "*",
+      "gulp-replace": "*",
+      "gulp-wrap": "*",
+      "markdown-include": "*",
+      "chai": "*",
+      "babel-preset-es2017": "*",
+      "babel-preset-es2016": "*",
+      "babel-preset-es2015": "*",
+      "babel-plugin-add-module-exports": "*",
+      "gulp-babel": "*",
+      "gulp-eslint": "*",
+      "eslint-config-google": "*",
+      "gulp-mocha": "*",
+      "muter": "*",
+      "child-process-data": "*"
+    },
+    "genVersion": "0.3.0",
+    "updated": "2017-04-30T19:04:57.481Z",
+    "created": "2017-04-30T19:00:44.688Z",
+    "version": "0.0.0",
+    "contributors": [],
+    "keywords": [],
+    "deps": {
+      "gulp-util": "*",
+      "through2": "*"
+    },
+    "peerDeps": {},
+    "name": "gulp-antlr4",
+    "description": "Gulp plugin running ANTLR 4",
+    "author": "Jason Lenoble",
+    "email": "jason.lenoble@gmail.com",
+    "github": "jlenoble",
+    "preprocessors": [],
+    "license": "MIT",
+    "babel": "es2017",
+    "linters": [
+      "EsLint"
+    ],
+    "addons": [],
+    "testRunners": [
+      "Mocha"
+    ]
+  }
+}

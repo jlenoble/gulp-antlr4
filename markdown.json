@@ -1,0 +1,7 @@
+{
+  "build": "README.md",
+  "files": ["docs/index.md"],
+  "tableOfContents": {
+    "heading": "# gulp-antlr4\n\nGulp plugin running ANTLR 4"
+  }
+}
