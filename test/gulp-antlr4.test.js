@@ -1,28 +1,42 @@
 import {expect} from 'chai';
-import gulpAntlr4 from '../src/gulp-antlr4.js';
 import {makeSingleTest} from 'child-process-data';
+import {expectEventuallyFound} from 'stat-again';
+import {tmpDir} from 'cleanup-wrapper';
 
 describe('Testing Gulp plugin gulpAntlr4', function () {
   this.timeout('10000');
+  const outputDir = 'build/antlr4';
 
-  it(`Running gulpfile 'test/gulpfiles/gulpfile.babel.js'`, function () {
+  it(`Running gulpfile 'test/gulpfiles/gulpfile.babel.js'`, tmpDir(outputDir,
+  function () {
     const test = makeSingleTest({
-      childProcess: ['gulp', ['--gulpfile', 'test/gulpfiles/gulpfile.babel.js']],
+      childProcess: ['gulp', ['--gulpfile',
+        'test/gulpfiles/gulpfile.babel.js']],
 
       checkResults (results) {
-        expect(results.out()).to.match(
-          /Requiring external module babel-register/);
-        expect(results.out()).to.match(
-          /Working directory changed to/);
-        expect(results.out()).to.match(
-          /Using gulpfile/);
-        expect(results.out()).to.match(
-          /Starting 'default'.../);
-        expect(results.out()).to.match(
-          /Finished 'default' after/);
+        const out = results.out();
+        [
+          /Requiring external module babel-register/,
+          /Working directory changed to/,
+          /Using gulpfile/,
+          /Starting 'default'.../,
+          /Finished 'default' after/,
+        ].forEach(pat => {
+          expect(out).to.match(pat);
+        });
+      },
+
+      onSuccess () {
+        return Promise.all([
+          expectEventuallyFound(`${outputDir}/Hello.tokens`),
+          expectEventuallyFound(`${outputDir}/HelloLexer.js`),
+          expectEventuallyFound(`${outputDir}/HelloLexer.tokens`),
+          expectEventuallyFound(`${outputDir}/HelloListener.js`),
+          expectEventuallyFound(`${outputDir}/HelloParser.js`),
+        ]);
       },
     });
 
     return test();
-  })
+  }));
 });

@@ -36,6 +36,7 @@
     "babel-preset-es2017": "*",
     "chai": "*",
     "child-process-data": "*",
+    "cleanup-wrapper": "^0.2.3",
     "del": "*",
     "eslint-config-google": "*",
     "gulp": "git://github.com/gulpjs/gulp.git#4.0",
@@ -48,7 +49,8 @@
     "gulp-wrap": "*",
     "markdown-include": "*",
     "muter": "*",
-    "plumb-gulp": "*"
+    "plumb-gulp": "*",
+    "stat-again": "^0.2.0"
   },
   "peerDependencies": {}
 }
