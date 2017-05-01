@@ -12,6 +12,7 @@ export default function (_options) {
 
   const options = formatOptions(_options);
   const antlrDir = getANTLRDir(options);
+  const antlrMode = getANTLRMode(options);
   const ANTLR4 = getANTLRClasses(options);
 
   return through.obj(function (file, encoding, callback) {
@@ -37,7 +38,7 @@ export default function (_options) {
         });
 
       default:
-        if (ANTLR4.isSetup()) {
+        if (ANTLR4.isProperlySetup()) {
           const data = file.contents.toString('utf8');
           const chars = new InputStream(data, true);
           const lexer = new ANTLR4.Lexer(chars);
@@ -45,6 +46,12 @@ export default function (_options) {
           const parser = new ANTLR4.Parser(tokens);
           parser.buildParseTrees = true;
           const tree = parser[ANTLR4.startRule]();
+
+          switch (antlrMode) {
+          case 'tree':
+            console.log(tree.toStringTree(parser.ruleNames));
+            break;
+          }
         }
 
         return callback(null, file);
@@ -90,12 +97,23 @@ function getANTLRDir (options) {
   return antlrDir;
 }
 
+function getANTLRMode (options) {
+  const {antlrMode} = options;
+
+  if (typeof antlrMode !== 'string' && antlrMode !== undefined) {
+    throw new PluginError(PLUGIN_NAME,
+      new TypeError(`Bad option: ${antlrMode}`));
+  }
+
+  return antlrMode;
+}
+
 function getANTLRClasses (options) {
   const {grammarName} = options;
 
   if (!grammarName) {
     return {
-      isSetup() {
+      isProperlySetup () {
         return false;
       },
     };
@@ -105,10 +123,10 @@ function getANTLRClasses (options) {
     startRule: getStartRule(options),
     Lexer: getLexer(options),
     Parser: getParser(options),
-    isSetup() {
+    isProperlySetup () {
       return true;
     },
-  }
+  };
 }
 
 function getStartRule (options) {

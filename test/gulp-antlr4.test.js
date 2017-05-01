@@ -38,22 +38,19 @@ describe('Testing Gulp plugin gulpAntlr4', function () {
     }));
   });
 
-  // it(`Running parser ArrayInit`, tmpDir(outputDir, function () {
-  it(`Running parser ArrayInit`, function () {
+  it(`Running parser ArrayInit`, tmpDir(outputDir, function () {
     return runGrammar({
       grammarName: 'ArrayInit',
       inputFile: 'data.txt',
-      outputDir: 'build/tmp',
+      outputDir: outputDir,
       startRule: 'init',
+      antlrMode: 'tree',
 
-      checkResults () {
-
-      },
-
-      onSuccess () {
-
+      checkResults (results) {
+        const out = '\\(init \\{ \\(value 1\\) , \\(value \\(init \\{ \\(' +
+          'value 2\\) , \\(value 3\\) \\}\\)\\) , \\(value 4\\) \\}\\)';
+        expect(results.out()).to.match(new RegExp(out));
       },
     });
-  });
-  // }));
+  }));
 });

@@ -32,6 +32,8 @@ export const runGrammar = _options => {
       _options.inputFile,
       '--rule',
       _options.startRule,
+      '--mode',
+      _options.antlrMode,
       'run',
     ]],
   }, _options);

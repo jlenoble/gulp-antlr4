@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/jlenoble/gulp-antlr4#readme",
   "dependencies": {
+    "antlr4": "^4.7.0",
     "gulp-util": "*",
     "through2": "*"
   },
