@@ -7,8 +7,10 @@ export const testGrammar = _options => {
     childProcess: ['gulp', [
       '--gulpfile',
       'test/gulpfiles/gulpfile.babel.js',
-      `--grammar=${_options.grammarName}`,
-      `--output=${_options.outputDir || outputDir}`,
+      '--grammar',
+      _options.grammarName,
+      '--output',
+      _options.outputDir || outputDir,
     ]],
   }, _options);
 

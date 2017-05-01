@@ -6,23 +6,23 @@ import {testGrammar, outputDir} from './helpers';
 describe('Testing Gulp plugin gulpAntlr4', function () {
   this.timeout('10000');
 
+  const checkResults = results => {
+    const out = results.out();
+    [
+      /Requiring external module babel-register/,
+      /Working directory changed to/,
+      /Using gulpfile/,
+      /Starting 'default'.../,
+      /Finished 'default' after/,
+    ].forEach(pat => {
+      expect(out).to.match(pat);
+    });
+  };
+
   [
     'Hello',
     'ArrayInit',
   ].forEach(grammarName => {
-    const checkResults = results => {
-      const out = results.out();
-      [
-        /Requiring external module babel-register/,
-        /Working directory changed to/,
-        /Using gulpfile/,
-        /Starting 'default'.../,
-        /Finished 'default' after/,
-      ].forEach(pat => {
-        expect(out).to.match(pat);
-      });
-    };
-
     const onSuccess = () => {
       return Promise.all([
         expectEventuallyFound(`${outputDir}/${grammarName}.tokens`),
