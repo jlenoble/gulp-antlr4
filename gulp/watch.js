@@ -5,20 +5,20 @@ import {test} from './test';
 
 const allSrcGlob = [
   'src/**/*.js',
-  'test/**/*.js'
+  'test/**/*.js',
 ];
 const allBuildGlob = [
   'build/src/**/*.js',
-  'build/test/**/*.js'
+  'build/test/**/*.js',
 ];
-const allSassGlob = [
-  'src/static/scss/**/*.scss'
+const allGrammarGlob = [
+  'test/sources/**/*.g4',
 ];
-
 
 export const watch = done => {
   gulp.watch(allSrcGlob, build);
   gulp.watch(allBuildGlob, test);
+  gulp.watch(allGrammarGlob, test);
   done();
 };
 
