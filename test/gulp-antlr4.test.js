@@ -53,4 +53,23 @@ describe('Testing Gulp plugin gulpAntlr4', function () {
       },
     });
   }));
+
+  it(`Running parser ArrayInit`, tmpDir(outputDir, function () {
+    return runGrammar({
+      grammarName: 'ArrayInit',
+      inputFile: 'data2.txt',
+      outputDir: outputDir,
+      startRule: 'init',
+      antlrMode: 'tree',
+
+      checkResults (results) {
+        const err = 'line 2:0 extraneous input \'<EOF>\' expecting \\{\',\', ' +
+          '\'\\}\'\\}';
+        const out = '\\(init \\{ \\(value 1\\) , \\(value 2\\) ' +
+          '<missing \'\\}\'>\\)';
+        expect(results.err()).to.match(new RegExp(err));
+        expect(results.out()).to.match(new RegExp(out));
+      },
+    });
+  }));
 });
