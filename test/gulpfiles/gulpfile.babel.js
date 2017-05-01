@@ -6,7 +6,7 @@ const test = () => {
   return gulp.src([
     `../sources/**/${argv.grammar || '*'}.g4`,
   ])
-    .pipe(antlr4('../../build/antlr4'));
+    .pipe(antlr4('../../' + `${argv.output || 'build/antlr4'}`));
 };
 
 gulp.task('default', test);
