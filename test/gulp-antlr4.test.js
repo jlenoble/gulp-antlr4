@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {tmpDir} from 'cleanup-wrapper';
 import {expectEventuallyFound} from 'stat-again';
-import {testGrammar, outputDir} from './helpers';
+import {testGrammar, runGrammar, outputDir} from './helpers';
 
 describe('Testing Gulp plugin gulpAntlr4', function () {
   this.timeout('10000');
@@ -20,8 +20,8 @@ describe('Testing Gulp plugin gulpAntlr4', function () {
   };
 
   [
-    'Hello',
-    'ArrayInit',
+    // 'Hello',
+    // 'ArrayInit',
   ].forEach(grammarName => {
     const onSuccess = () => {
       return Promise.all([
@@ -37,4 +37,23 @@ describe('Testing Gulp plugin gulpAntlr4', function () {
       return testGrammar({grammarName, checkResults, onSuccess});
     }));
   });
+
+  // it(`Running parser ArrayInit`, tmpDir(outputDir, function () {
+  it(`Running parser ArrayInit`, function () {
+    return runGrammar({
+      grammarName: 'ArrayInit',
+      inputFile: 'data.txt',
+      outputDir: 'build/tmp',
+      startRule: 'init',
+
+      checkResults () {
+
+      },
+
+      onSuccess () {
+
+      },
+    });
+  });
+  // }));
 });

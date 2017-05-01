@@ -12,7 +12,7 @@ const allBuildGlob = [
   'build/test/**/*.js',
 ];
 const allGrammarGlob = [
-  'test/sources/**/*.g4',
+  'test/sources/**/*',
 ];
 
 export const watch = done => {

@@ -18,3 +18,25 @@ export const testGrammar = _options => {
 
   return test();
 };
+
+export const runGrammar = _options => {
+  const options = Object.assign({
+    childProcess: ['gulp', [
+      '--gulpfile',
+      'test/gulpfiles/gulpfile.babel.js',
+      '--grammar',
+      _options.grammarName,
+      '--output',
+      _options.outputDir || outputDir,
+      '--input',
+      _options.inputFile,
+      '--rule',
+      _options.startRule,
+      'run',
+    ]],
+  }, _options);
+
+  const test = makeSingleTest(options);
+
+  return test();
+};
