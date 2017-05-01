@@ -7,69 +7,12 @@ import {InputStream, CommonTokenStream} from 'antlr4';
 
 const PLUGIN_NAME = 'gulp-antlr4';
 
-export default function (_antlrDir) {
-  const antlrDir = _antlrDir && _antlrDir.antlrDir || _antlrDir;
+export default function (_options) {
+  checkJava();
 
-  if (typeof antlrDir !== 'string') {
-    throw new PluginError(PLUGIN_NAME,
-      new TypeError(`You must provide the directory where to write or read
-     the generated lexing and parsing tools (option 'antlrDir')`));
-  }
-
-  const {grammarName, startRule} = _antlrDir;
-
-  const CLASSPATH = process.env.CLASSPATH;
-
-  if (!CLASSPATH) {
-    throw new PluginError(PLUGIN_NAME,
-      new ReferenceError(`Environment variable CLASSPATH is not defined`));
-  }
-
-  // Not matching '~' as it is not understood by Java anyway
-  const matchJar = CLASSPATH.match(
-    /.*:((\d|\w|\/|-|_|\.)+antlr-\d+\.\d+-complete\.jar):.*/);
-
-  if (matchJar === null) {
-    throw new PluginError(PLUGIN_NAME,
-      new ReferenceError(`Cannot find ANTLR 4 .jar file`));
-  }
-
-  const ANTLR4 = grammarName ? {
-    grammarName, startRule,
-    lexerName: `${grammarName}Lexer`,
-    parserName: `${grammarName}Parser`,
-    isOk (ctx) {
-      if (!this.Lexer) {
-        ctx.emit('error', new PluginError(PLUGIN_NAME, `Undefined ${
-          this.lexerName}`));
-        return false;
-      }
-
-      if (!this.Parser) {
-        ctx.emit('error', new PluginError(PLUGIN_NAME, `Undefined ${
-          this.parserName}`));
-        return false;
-      }
-
-      if (!this.startRule) {
-        ctx.emit('error', new PluginError(PLUGIN_NAME,
-          `Undefined start rule (option 'rule')`));
-        return false;
-      }
-
-      return true;
-    },
-  } : {
-    isOk () {
-      return false;
-    },
-  };
-
-  if (grammarName) {
-    const {lexerName, parserName} = ANTLR4;
-    ANTLR4.Lexer = require(path.join(antlrDir, lexerName))[lexerName];
-    ANTLR4.Parser = require(path.join(antlrDir, parserName))[parserName];
-  }
+  const options = formatOptions(_options);
+  const antlrDir = getANTLRDir(options);
+  const ANTLR4 = getANTLRClasses(options);
 
   return through.obj(function (file, encoding, callback) {
     if (file.isNull()) {
@@ -94,7 +37,7 @@ export default function (_antlrDir) {
         });
 
       default:
-        if (ANTLR4.isOk(this)) {
+        if (ANTLR4.isSetup()) {
           const data = file.contents.toString('utf8');
           const chars = new InputStream(data, true);
           const lexer = new ANTLR4.Lexer(chars);
@@ -108,4 +51,87 @@ export default function (_antlrDir) {
       }
     }
   });
+}
+
+function checkJava () {
+  const CLASSPATH = process.env.CLASSPATH;
+
+  if (!CLASSPATH) {
+    throw new PluginError(PLUGIN_NAME,
+      new ReferenceError(`Environment variable CLASSPATH is not defined`));
+  }
+
+  // Not matching '~' as it is not understood by Java anyway
+  const matchJar = CLASSPATH.match(
+    /.*:((\d|\w|\/|-|_|\.)+antlr-\d+\.\d+-complete\.jar):.*/);
+
+  if (matchJar === null) {
+    throw new PluginError(PLUGIN_NAME,
+      new ReferenceError(`Cannot find ANTLR 4 .jar file`));
+  }
+}
+
+function formatOptions (options) {
+  if (typeof options === 'string') {
+    return {antlrDir: options};
+  }
+  return typeof options === 'object' ? options : {};
+}
+
+function getANTLRDir (options) {
+  const {antlrDir} = options;
+
+  if (typeof antlrDir !== 'string') {
+    throw new PluginError(PLUGIN_NAME,
+      new TypeError(`You must provide the directory where to write or read
+     the generated lexing and parsing tools (option 'antlrDir')`));
+  }
+
+  return antlrDir;
+}
+
+function getANTLRClasses (options) {
+  const {grammarName} = options;
+
+  if (!grammarName) {
+    return {
+      isSetup() {
+        return false;
+      },
+    };
+  }
+
+  return {
+    startRule: getStartRule(options),
+    Lexer: getLexer(options),
+    Parser: getParser(options),
+    isSetup() {
+      return true;
+    },
+  }
+}
+
+function getStartRule (options) {
+  const {startRule} = options;
+
+  if (!startRule) {
+    throw new PluginError(PLUGIN_NAME,
+      `Undefined start rule (option 'startRule')`);
+  }
+
+  return startRule;
+}
+
+function getLexer (options) {
+  const {grammarName, antlrDir} = options;
+  const lexerName = `${grammarName}Lexer`;
+
+  return require(path.join(antlrDir, lexerName))[lexerName];
+}
+
+function getParser (options) {
+  const {grammarName, antlrDir} = options;
+  const parserName = `${grammarName}Parser`;
+
+  return require(path.join(antlrDir, parserName))[parserName];
 }

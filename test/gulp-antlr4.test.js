@@ -20,8 +20,8 @@ describe('Testing Gulp plugin gulpAntlr4', function () {
   };
 
   [
-    // 'Hello',
-    // 'ArrayInit',
+    'Hello',
+    'ArrayInit',
   ].forEach(grammarName => {
     const onSuccess = () => {
       return Promise.all([
