@@ -164,11 +164,11 @@ function getParser (options) {
 }
 
 function getListener (options) {
-  const {listener, sourcesDir} = options;
+  const {listener, grammarDir} = options;
 
   if (!listener) {
     return;
   }
 
-  return require(path.join(sourcesDir, listener))[listener];
+  return require(path.join(grammarDir, listener))[listener];
 }
