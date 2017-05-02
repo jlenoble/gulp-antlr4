@@ -10,7 +10,7 @@ const processArgv = argv => {
   return argv;
 };
 
-const grammarName = processArgv(argv.grammar);
+const grammar = processArgv(argv.grammar);
 const outputDir = processArgv(argv.output || 'build/antlr4');
 const inputFile = processArgv(argv.input);
 const rule = processArgv(argv.rule);
@@ -18,7 +18,7 @@ let sourcesDir = '../sources';
 const mode = processArgv(argv.mode);
 const listener = processArgv(argv.listener);
 
-const grammarGlob = [`${sourcesDir}/${grammarName || '*'}.g4`];
+const grammarGlob = [`${sourcesDir}/${grammar || '*'}.g4`];
 const inputGlob = [`${sourcesDir}/${inputFile || '*.txt'}`];
 const rootDir = path.join(process.cwd(), '../..');
 const antlrDir = path.join(rootDir, outputDir);
@@ -31,8 +31,7 @@ const generate = () => {
 
 const run = () => {
   return gulp.src(inputGlob, {since: gulp.lastRun(run)})
-    .pipe(antlr4({antlrDir, sourcesDir, grammarName, listener, rule,
-      mode}));
+    .pipe(antlr4({antlrDir, sourcesDir, grammar, listener, rule, mode}));
 };
 
 gulp.task('run', gulp.series(generate, run));

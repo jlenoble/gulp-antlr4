@@ -117,9 +117,9 @@ function getMode (options) {
 }
 
 function getANTLRClasses (options) {
-  const {grammarName} = options;
+  const {grammar} = options;
 
-  if (!grammarName) {
+  if (!grammar) {
     return {
       isProperlySetup () {
         return false;
@@ -150,15 +150,15 @@ function getRule (options) {
 }
 
 function getLexer (options) {
-  const {grammarName, antlrDir} = options;
-  const lexerName = `${grammarName}Lexer`;
+  const {grammar, antlrDir} = options;
+  const lexerName = `${grammar}Lexer`;
 
   return require(path.join(antlrDir, lexerName))[lexerName];
 }
 
 function getParser (options) {
-  const {grammarName, antlrDir} = options;
-  const parserName = `${grammarName}Parser`;
+  const {grammar, antlrDir} = options;
+  const parserName = `${grammar}Parser`;
 
   return require(path.join(antlrDir, parserName))[parserName];
 }
