@@ -106,14 +106,14 @@ function getANTLRDir (options) {
 }
 
 function getMode (options) {
-  const {mode, listenerName} = options;
+  const {mode, listener} = options;
 
   if (typeof mode !== 'string' && mode !== undefined) {
     throw new PluginError(PLUGIN_NAME,
       new TypeError(`Bad option: ${mode}`));
   }
 
-  return listenerName ? 'walk': mode;
+  return listener ? 'walk': mode;
 }
 
 function getANTLRClasses (options) {
@@ -164,11 +164,11 @@ function getParser (options) {
 }
 
 function getListener (options) {
-  const {listenerName, sourcesDir} = options;
+  const {listener, sourcesDir} = options;
 
-  if (!listenerName) {
+  if (!listener) {
     return;
   }
 
-  return require(path.join(sourcesDir, listenerName))[listenerName];
+  return require(path.join(sourcesDir, listener))[listener];
 }
