@@ -12,7 +12,7 @@ export default function (_options) {
   checkJava();
 
   const options = formatOptions(_options);
-  const classDir = getClassDir(options);
+  const parserDir = getClassDir(options);
   const mode = getMode(options);
   const ANTLR4 = getClasses(options);
 
@@ -30,7 +30,7 @@ export default function (_options) {
       switch (path.extname(inputFile)) {
       case '.g4':
         return childProcessData(spawn('java', ['org.antlr.v4.Tool',
-          '-Dlanguage=JavaScript', '-o', classDir, inputFile]))
+          '-Dlanguage=JavaScript', '-o', parserDir, inputFile]))
         .then(() => {
           callback(null, file);
         }, err => {
@@ -88,21 +88,21 @@ function checkJava () {
 
 function formatOptions (options) {
   if (typeof options === 'string') {
-    return {classDir: options};
+    return {parserDir: options};
   }
   return typeof options === 'object' ? options : {};
 }
 
 function getClassDir (options) {
-  const {classDir} = options;
+  const {parserDir} = options;
 
-  if (typeof classDir !== 'string') {
+  if (typeof parserDir !== 'string') {
     throw new PluginError(PLUGIN_NAME,
       new TypeError(`You must provide the directory where to write or read
-     the generated lexing and parsing tools (option 'classDir')`));
+     the generated lexing and parsing tools (option 'parserDir')`));
   }
 
-  return classDir;
+  return parserDir;
 }
 
 function getMode (options) {
@@ -150,25 +150,25 @@ function getRule (options) {
 }
 
 function getLexer (options) {
-  const {grammar, classDir} = options;
+  const {grammar, parserDir} = options;
   const lexer = `${grammar}Lexer`;
 
-  return require(path.join(classDir, lexer))[lexer];
+  return require(path.join(parserDir, lexer))[lexer];
 }
 
 function getParser (options) {
-  const {grammar, classDir} = options;
+  const {grammar, parserDir} = options;
   const parser = `${grammar}Parser`;
 
-  return require(path.join(classDir, parser))[parser];
+  return require(path.join(parserDir, parser))[parser];
 }
 
 function getListener (options) {
-  const {listener, grammarDir} = options;
+  const {listener, listenerDir} = options;
 
   if (!listener) {
     return;
   }
 
-  return require(path.join(grammarDir, listener))[listener];
+  return require(path.join(listenerDir, listener))[listener];
 }
