@@ -151,16 +151,16 @@ function getRule (options) {
 
 function getLexer (options) {
   const {grammar, classDir} = options;
-  const lexerName = `${grammar}Lexer`;
+  const lexer = `${grammar}Lexer`;
 
-  return require(path.join(classDir, lexerName))[lexerName];
+  return require(path.join(classDir, lexer))[lexer];
 }
 
 function getParser (options) {
   const {grammar, classDir} = options;
-  const parserName = `${grammar}Parser`;
+  const parser = `${grammar}Parser`;
 
-  return require(path.join(classDir, parserName))[parserName];
+  return require(path.join(classDir, parser))[parser];
 }
 
 function getListener (options) {
