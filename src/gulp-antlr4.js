@@ -46,7 +46,7 @@ export default function (_options) {
           const tokens = new CommonTokenStream(lexer);
           const parser = new ANTLR4.Parser(tokens);
           parser.buildParseTrees = true;
-          const tree = parser[ANTLR4.startRule]();
+          const tree = parser[ANTLR4.rule]();
 
           switch (antlrMode) {
           case 'tree':
@@ -128,7 +128,7 @@ function getANTLRClasses (options) {
   }
 
   return {
-    startRule: getStartRule(options),
+    rule: getRule(options),
     Lexer: getLexer(options),
     Parser: getParser(options),
     Listener: getListener(options),
@@ -138,15 +138,15 @@ function getANTLRClasses (options) {
   };
 }
 
-function getStartRule (options) {
-  const {startRule} = options;
+function getRule (options) {
+  const {rule} = options;
 
-  if (!startRule) {
+  if (!rule) {
     throw new PluginError(PLUGIN_NAME,
-      `Undefined start rule (option 'startRule')`);
+      `Undefined starting rule (option 'rule')`);
   }
 
-  return startRule;
+  return rule;
 }
 
 function getLexer (options) {
