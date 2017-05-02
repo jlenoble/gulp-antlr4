@@ -13,7 +13,7 @@ export default function (_options) {
 
   const options = formatOptions(_options);
   const antlrDir = getANTLRDir(options);
-  const antlrMode = getANTLRMode(options);
+  const mode = getMode(options);
   const ANTLR4 = getANTLRClasses(options);
 
   return through.obj(function (file, encoding, callback) {
@@ -48,7 +48,7 @@ export default function (_options) {
           parser.buildParseTrees = true;
           const tree = parser[ANTLR4.rule]();
 
-          switch (antlrMode) {
+          switch (mode) {
           case 'tree':
             console.log(tree.toStringTree(parser.ruleNames));
             break;
@@ -105,15 +105,15 @@ function getANTLRDir (options) {
   return antlrDir;
 }
 
-function getANTLRMode (options) {
-  const {antlrMode, listenerName} = options;
+function getMode (options) {
+  const {mode, listenerName} = options;
 
-  if (typeof antlrMode !== 'string' && antlrMode !== undefined) {
+  if (typeof mode !== 'string' && mode !== undefined) {
     throw new PluginError(PLUGIN_NAME,
-      new TypeError(`Bad option: ${antlrMode}`));
+      new TypeError(`Bad option: ${mode}`));
   }
 
-  return listenerName ? 'walk': antlrMode;
+  return listenerName ? 'walk': mode;
 }
 
 function getANTLRClasses (options) {
