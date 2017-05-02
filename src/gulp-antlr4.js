@@ -90,7 +90,9 @@ function formatOptions (options) {
   if (typeof options === 'string') {
     return {parserDir: options};
   }
-  return typeof options === 'object' ? options : {};
+  return typeof options === 'object' ? Object.assign({
+    listenerDir: options.parserDir, // Default is same dir
+  }, options) : {};
 }
 
 function getClassDir (options) {
