@@ -38,7 +38,7 @@ describe('Testing Gulp plugin gulpAntlr4', function () {
     }));
   });
 
-  it(`Running parser ArrayInit`, tmpDir(outputDir, function () {
+  it(`Running parser ArrayInit on good input`, tmpDir(outputDir, function () {
     return runGrammar({
       grammarName: 'ArrayInit',
       inputFile: 'data.txt',
@@ -54,7 +54,7 @@ describe('Testing Gulp plugin gulpAntlr4', function () {
     });
   }));
 
-  it(`Running parser ArrayInit`, tmpDir(outputDir, function () {
+  it(`Running parser ArrayInit on bad input`, tmpDir(outputDir, function () {
     return runGrammar({
       grammarName: 'ArrayInit',
       inputFile: 'data2.txt',
@@ -69,6 +69,24 @@ describe('Testing Gulp plugin gulpAntlr4', function () {
           '<missing \'\\}\'>\\)';
         expect(results.err()).to.match(new RegExp(err));
         expect(results.out()).to.match(new RegExp(out));
+      },
+    });
+  }));
+
+  it(`Running ArrayInit with listener ShortToUnicodeString`,
+  tmpDir(outputDir, function () {
+    return runGrammar({
+      grammarName: 'ArrayInit',
+      inputFile: 'data3.txt',
+      outputDir: outputDir,
+      startRule: 'init',
+      listenerName: 'ShortToUnicodeString',
+
+      checkResults (results) {
+        return expectEventuallyFound(`${outputDir}/ArrayInitListener.js`)
+          .then(() => {
+            expect(results.out()).to.match(/\\u0063\\u0003\\u01c3/);
+          });
       },
     });
   }));

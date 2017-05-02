@@ -34,6 +34,8 @@ export const runGrammar = _options => {
       _options.startRule,
       '--mode',
       _options.antlrMode,
+      '--listener',
+      _options.listenerName,
       'run',
     ]],
   }, _options);

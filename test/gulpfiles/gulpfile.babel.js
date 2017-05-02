@@ -3,17 +3,26 @@ import path from 'path';
 import antlr4 from '../../src/gulp-antlr4.js';
 import {argv} from 'yargs';
 
-const grammarName = argv.grammar;
-const outputDir = argv.output || 'build/antlr4';
-const inputFile = argv.input;
-const startRule = argv.rule;
-const sourcesDir = '../sources';
-const antlrMode = argv.mode;
+const processArgv = argv => {
+  if (!argv || argv === 'undefined') {
+    return undefined;
+  }
+  return argv;
+};
+
+const grammarName = processArgv(argv.grammar);
+const outputDir = processArgv(argv.output || 'build/antlr4');
+const inputFile = processArgv(argv.input);
+const startRule = processArgv(argv.rule);
+let sourcesDir = '../sources';
+const antlrMode = processArgv(argv.mode);
+const listenerName = processArgv(argv.listener);
 
 const grammarGlob = [`${sourcesDir}/${grammarName || '*'}.g4`];
 const inputGlob = [`${sourcesDir}/${inputFile || '*.txt'}`];
 const rootDir = path.join(process.cwd(), '../..');
 const antlrDir = path.join(rootDir, outputDir);
+sourcesDir = path.join(antlrDir, '../test/sources');
 
 const generate = () => {
   return gulp.src(grammarGlob, {since: gulp.lastRun(generate)})
@@ -22,7 +31,8 @@ const generate = () => {
 
 const run = () => {
   return gulp.src(inputGlob, {since: gulp.lastRun(run)})
-    .pipe(antlr4({antlrDir, grammarName, startRule, antlrMode}));
+    .pipe(antlr4({antlrDir, sourcesDir, grammarName, listenerName,
+      startRule, antlrMode}));
 };
 
 gulp.task('run', gulp.series(generate, run));

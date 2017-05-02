@@ -4,6 +4,7 @@ import path from 'path';
 import {spawn} from 'child_process';
 import childProcessData from 'child-process-data';
 import {InputStream, CommonTokenStream} from 'antlr4';
+import {ParseTreeWalker} from 'antlr4/tree';
 
 const PLUGIN_NAME = 'gulp-antlr4';
 
@@ -50,6 +51,13 @@ export default function (_options) {
           switch (antlrMode) {
           case 'tree':
             console.log(tree.toStringTree(parser.ruleNames));
+            break;
+
+          case 'walk':
+            const walker = new ParseTreeWalker();
+            const listener = new ANTLR4.Listener();
+            walker.walk(listener, tree);
+            console.log('');
             break;
           }
         }
@@ -98,14 +106,14 @@ function getANTLRDir (options) {
 }
 
 function getANTLRMode (options) {
-  const {antlrMode} = options;
+  const {antlrMode, listenerName} = options;
 
   if (typeof antlrMode !== 'string' && antlrMode !== undefined) {
     throw new PluginError(PLUGIN_NAME,
       new TypeError(`Bad option: ${antlrMode}`));
   }
 
-  return antlrMode;
+  return listenerName ? 'walk': antlrMode;
 }
 
 function getANTLRClasses (options) {
@@ -123,6 +131,7 @@ function getANTLRClasses (options) {
     startRule: getStartRule(options),
     Lexer: getLexer(options),
     Parser: getParser(options),
+    Listener: getListener(options),
     isProperlySetup () {
       return true;
     },
@@ -152,4 +161,14 @@ function getParser (options) {
   const parserName = `${grammarName}Parser`;
 
   return require(path.join(antlrDir, parserName))[parserName];
+}
+
+function getListener (options) {
+  const {listenerName, sourcesDir} = options;
+
+  if (!listenerName) {
+    return;
+  }
+
+  return require(path.join(sourcesDir, listenerName))[listenerName];
 }
