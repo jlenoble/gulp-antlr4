@@ -155,14 +155,20 @@ function getLexer (options) {
   const {grammar, parserDir} = options;
   const lexer = `${grammar}Lexer`;
 
-  return require(path.join(parserDir, lexer))[lexer];
+  // Convert relative to absolute path
+  const base = process.cwd();
+  const rel = path.relative(base, parserDir);
+  return require(path.join(base, rel, lexer))[lexer];
 }
 
 function getParser (options) {
   const {grammar, parserDir} = options;
   const parser = `${grammar}Parser`;
 
-  return require(path.join(parserDir, parser))[parser];
+  // Convert relative to absolute path
+  const base = process.cwd();
+  const rel = path.relative(base, parserDir);
+  return require(path.join(base, rel, parser))[parser];
 }
 
 function getListener (options) {
@@ -172,5 +178,8 @@ function getListener (options) {
     return;
   }
 
-  return require(path.join(listenerDir, listener))[listener];
+  // Convert relative to absolute path
+  const base = process.cwd();
+  const rel = path.relative(base, listenerDir);
+  return require(path.join(base, rel, listener))[listener];
 }
