@@ -30,7 +30,8 @@
   "dependencies": {
     "antlr4": "^4.7.0",
     "gulp-util": "*",
-    "through2": "*"
+    "through2": "*",
+    "child-process-data": "*",
   },
   "devDependencies": {
     "autoreload-gulp": "*",
