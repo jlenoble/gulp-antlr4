@@ -17,21 +17,24 @@ const rule = processArgv(argv.rule);
 const sourcesDir = '../sources';
 const mode = processArgv(argv.mode);
 const listener = processArgv(argv.listener);
+const visitor = processArgv(argv.visitor);
 
 const grammarGlob = [`${sourcesDir}/${grammar || '*'}.g4`];
 const inputGlob = [`${sourcesDir}/${inputFile || '*.txt'}`];
 const rootDir = path.join(process.cwd(), '../..');
 const parserDir = path.join(rootDir, outputDir);
 const listenerDir = path.join(parserDir, '../test/sources');
+const visitorDir = path.join(parserDir, '../test/sources');
 
 const generate = () => {
   return gulp.src(grammarGlob, {since: gulp.lastRun(generate)})
-    .pipe(antlr4(parserDir));
+    .pipe(antlr4({parserDir, listener, visitor}));
 };
 
 const run = () => {
   return gulp.src(inputGlob, {since: gulp.lastRun(run)})
-    .pipe(antlr4({parserDir, listenerDir, grammar, listener, rule, mode}));
+    .pipe(antlr4({parserDir, listenerDir, grammar, listener, rule, mode,
+      visitorDir, visitor}));
 };
 
 gulp.task('run', gulp.series(generate, run));

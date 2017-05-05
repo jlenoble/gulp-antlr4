@@ -29,8 +29,16 @@ export default function (_options) {
 
       switch (path.extname(inputFile)) {
       case '.g4':
-        return childProcessData(spawn('java', ['org.antlr.v4.Tool',
-          '-Dlanguage=JavaScript', '-o', parserDir, inputFile]))
+        const args = ['org.antlr.v4.Tool', '-Dlanguage=JavaScript', '-o',
+          parserDir];
+        if (mode === 'visitor' || mode === 'both') {
+          args.push('-visitor');
+        }
+        if (mode !== 'listener' && mode !== 'both') {
+          args.push('-no-listener');
+        }
+        args.push(inputFile);
+        return childProcessData(spawn('java', args))
         .then(() => {
           callback(null, file);
         }, err => {
@@ -53,9 +61,10 @@ export default function (_options) {
             console.log(tree.toStringTree(parser.ruleNames));
             break;
 
-          case 'walk':
+          case 'listener': case 'visitor':
             const walker = new ParseTreeWalker();
-            const listener = new ANTLR4.Listener();
+            const listener = new ANTLR4[mode === 'listener' ? 'Listener' :
+              'Visitor']();
             walker.walk(listener, tree);
             console.log('');
             break;
@@ -92,6 +101,7 @@ function formatOptions (options) {
   }
   return typeof options === 'object' ? Object.assign({
     listenerDir: options.parserDir, // Default is same dir
+    visitorDir: options.parserDir, // Default is same dir
   }, options) : {};
 }
 
@@ -108,14 +118,26 @@ function getClassDir (options) {
 }
 
 function getMode (options) {
-  const {mode, listener} = options;
+  const {mode, listener, visitor} = options;
 
   if (typeof mode !== 'string' && mode !== undefined) {
     throw new PluginError(PLUGIN_NAME,
       new TypeError(`Bad option: ${mode}`));
   }
 
-  return listener ? 'walk': mode;
+  if (listener && visitor) {
+    return 'both';
+  }
+
+  if (listener) {
+    return 'listener';
+  }
+
+  if (visitor) {
+    return 'visitor';
+  }
+
+  return mode || 'listener';
 }
 
 function getClasses (options) {
@@ -134,6 +156,7 @@ function getClasses (options) {
     Lexer: getLexer(options),
     Parser: getParser(options),
     Listener: getListener(options),
+    Visitor: getVisitor(options),
     isProperlySetup () {
       return true;
     },
@@ -182,4 +205,17 @@ function getListener (options) {
   const base = process.cwd();
   const rel = path.relative(base, listenerDir);
   return require(path.join(base, rel, listener))[listener];
+}
+
+function getVisitor (options) {
+  const {visitor, visitorDir} = options;
+
+  if (!visitor) {
+    return;
+  }
+
+  // Convert relative to absolute path
+  const base = process.cwd();
+  const rel = path.relative(base, visitorDir);
+  return require(path.join(base, rel, visitor))[visitor];
 }
