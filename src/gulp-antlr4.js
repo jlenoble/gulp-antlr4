@@ -12,7 +12,7 @@ export default function (_options) {
   checkJava();
 
   const options = formatOptions(_options);
-  const parserDir = getClassDir(options);
+  const parserDir = getParserDir(options);
   const mode = getMode(options);
   const ANTLR4 = getClasses(options);
 
@@ -61,12 +61,16 @@ export default function (_options) {
             console.log(tree.toStringTree(parser.ruleNames));
             break;
 
-          case 'listener': case 'visitor':
+          case 'listener':
             const walker = new ParseTreeWalker();
-            const listener = new ANTLR4[mode === 'listener' ? 'Listener' :
-              'Visitor']();
+            const listener = new ANTLR4.Listener();
             walker.walk(listener, tree);
             console.log('');
+            break;
+
+          case 'visitor':
+            const visitor = new ANTLR4.Visitor();
+            visitor.visit(tree);
             break;
           }
         }
@@ -105,7 +109,7 @@ function formatOptions (options) {
   }, options) : {};
 }
 
-function getClassDir (options) {
+function getParserDir (options) {
   const {parserDir} = options;
 
   if (typeof parserDir !== 'string') {

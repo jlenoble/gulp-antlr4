@@ -135,4 +135,22 @@ describe('Testing Gulp plugin gulpAntlr4', function () {
       },
     });
   }));
+
+  it(`Running Calc with visitor EvalVisitor`,
+  tmpDir(outputDir, function () {
+    return runGrammar({
+      grammarName: 'Calc',
+      inputFile: 'data4.txt',
+      outputDir: outputDir,
+      startRule: 'prog',
+      visitorName: 'EvalVisitor',
+
+      checkResults (results) {
+        return expectEventuallyFound(`${outputDir}/CalcVisitor.js`)
+          .then(() => {
+            expect(results.out()).to.match(/42/);
+          });
+      },
+    });
+  }));
 });
