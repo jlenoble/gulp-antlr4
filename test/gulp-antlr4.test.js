@@ -148,7 +148,7 @@ describe('Testing Gulp plugin gulpAntlr4', function () {
       checkResults (results) {
         return expectEventuallyFound(`${outputDir}/CalcVisitor.js`)
           .then(() => {
-            expect(results.out()).to.match(/42/);
+            expect(results.out()).to.match(/42424242/);
           });
       },
     });
