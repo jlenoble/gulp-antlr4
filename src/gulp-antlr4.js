@@ -86,7 +86,8 @@ function checkJava () {
 
   if (!CLASSPATH) {
     throw new PluginError(PLUGIN_NAME,
-      new ReferenceError(`Environment variable CLASSPATH is not defined`));
+      new ReferenceError(`Environment variable CLASSPATH is not defined;
+Java is not installed or is improperly set`));
   }
 
   // Not matching '~' as it is not understood by Java anyway
@@ -95,7 +96,8 @@ function checkJava () {
 
   if (matchJar === null) {
     throw new PluginError(PLUGIN_NAME,
-      new ReferenceError(`Cannot find ANTLR 4 .jar file`));
+      new ReferenceError(`Cannot find ANTLR4 .jar file;
+It should appear in your CLASSPATH`));
   }
 }
 
