@@ -192,20 +192,14 @@ function getLexer (options) {
   const {grammar, parserDir} = options;
   const lexer = `${grammar}Lexer`;
 
-  // Convert relative to absolute path
-  const base = process.cwd();
-  const rel = path.relative(base, parserDir);
-  return require(path.join(base, rel, lexer))[lexer];
+  return requireAfresh(lexer, parserDir);
 }
 
 function getParser (options) {
   const {grammar, parserDir} = options;
   const parser = `${grammar}Parser`;
 
-  // Convert relative to absolute path
-  const base = process.cwd();
-  const rel = path.relative(base, parserDir);
-  return require(path.join(base, rel, parser))[parser];
+  return requireAfresh(parser, parserDir);
 }
 
 function getListener (options) {
@@ -215,10 +209,7 @@ function getListener (options) {
     return;
   }
 
-  // Convert relative to absolute path
-  const base = process.cwd();
-  const rel = path.relative(base, listenerDir);
-  return require(path.join(base, rel, listener))[listener];
+  return requireAfresh(listener, listenerDir);
 }
 
 function getVisitor (options) {
@@ -228,8 +219,19 @@ function getVisitor (options) {
     return;
   }
 
+  return requireAfresh(visitor, visitorDir);
+}
+
+function requireAfresh (name, dir) {
   // Convert relative to absolute path
   const base = process.cwd();
-  const rel = path.relative(base, visitorDir);
-  return require(path.join(base, rel, visitor))[visitor];
+  const rel = path.relative(base, dir);
+  const file = path.join(base, rel, name);
+
+  // Don't cache parser files
+  if (require.cache && require.cache[file]) {
+    delete require.cache[file];
+  }
+
+  return require(file)[name];
 }
