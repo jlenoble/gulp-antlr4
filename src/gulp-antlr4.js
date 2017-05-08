@@ -42,8 +42,8 @@ export default function (_options) {
         .then(() => {
           callback(null, file);
         }, err => {
-          this.emit('error', new PluginError(PLUGIN_NAME,
-            new Error(err)));
+          this.emit('error', new PluginError(PLUGIN_NAME, err));
+          callback(null, file);
         });
 
       default:
@@ -62,15 +62,23 @@ export default function (_options) {
             break;
 
           case 'listener':
-            const walker = new ParseTreeWalker();
-            const listener = new ANTLR4.Listener();
-            walker.walk(listener, tree);
-            console.log('');
+            try {
+              const walker = new ParseTreeWalker();
+              const listener = new ANTLR4.Listener();
+              walker.walk(listener, tree);
+              console.log('');
+            } catch (err) {
+              this.emit('error', new PluginError(PLUGIN_NAME, err));
+            }
             break;
 
           case 'visitor':
-            const visitor = new ANTLR4.Visitor();
-            visitor.visit(tree);
+            try {
+              const visitor = new ANTLR4.Visitor();
+              visitor.visit(tree);
+            } catch (err) {
+              this.emit('error', new PluginError(PLUGIN_NAME, err));
+            }
             break;
           }
         }
