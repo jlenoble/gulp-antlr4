@@ -75,9 +75,17 @@ export default function (_options) {
           case 'visitor':
             try {
               const visitor = new ANTLR4.Visitor();
-              visitor.visit(tree);
+
+              Promise
+                .resolve(visitor.visit(tree))
+                .then(() => {
+                  this.emit('finish');
+                });
+
+              return; // Don't use callback but rely on above Promise
+              // to emit eventually the proper 'finish' event
             } catch (err) {
-              this.emit('error', new PluginError(PLUGIN_NAME, err));
+              this.emit('error', new _gulpUtil.PluginError(PLUGIN_NAME, err));
             }
             break;
           }
