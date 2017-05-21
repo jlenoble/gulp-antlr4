@@ -31,7 +31,7 @@
     "antlr4": "^4.7.0",
     "gulp-util": "*",
     "through2": "*",
-    "child-process-data": "^0.4.0"
+    "child-process-data": "^0.5.1"
   },
   "devDependencies": {
     "autoreload-gulp": "*",
