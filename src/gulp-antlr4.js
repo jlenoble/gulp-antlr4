@@ -85,7 +85,7 @@ export default function (_options) {
               return; // Don't use callback but rely on above Promise
               // to emit eventually the proper 'finish' event
             } catch (err) {
-              this.emit('error', new _gulpUtil.PluginError(PLUGIN_NAME, err));
+              this.emit('error', new PluginError(PLUGIN_NAME, err));
             }
             break;
           }
