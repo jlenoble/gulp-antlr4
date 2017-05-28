@@ -3,7 +3,7 @@ import {tmpDir} from 'cleanup-wrapper';
 import {expectEventuallyFound, expectEventuallyDeleted} from 'stat-again';
 import {testGrammar, runGrammar, outputDir} from './helpers';
 
-describe('Testing Gulp plugin gulpAntlr4', function () {
+describe('Testing Gulp plugin gulp-antlr4', function () {
   this.timeout('10000');
 
   const checkResults = results => {
