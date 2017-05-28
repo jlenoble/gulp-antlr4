@@ -62,15 +62,16 @@ export default function (_options) {
             break;
 
           case 'listener':
-            try {
+            new Promise((resolve, reject) => {
               const walker = new ParseTreeWalker();
-              const listener = new ANTLR4.Listener();
+              const listener = new ANTLR4.Listener(resolve, reject);
               walker.walk(listener, tree);
-              console.log('');
-            } catch (err) {
+            }).then(() => {
+              this.emit('finish');
+            }, err => {
               this.emit('error', new PluginError(PLUGIN_NAME, err));
-            }
-            break;
+            });
+            return;
 
           case 'visitor':
             try {
