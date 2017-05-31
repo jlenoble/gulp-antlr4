@@ -37,5 +37,12 @@ const run = () => {
       visitorDir, visitor}));
 };
 
+const stream = () => {
+  return gulp.src(inputGlob, {buffer: false})
+    .pipe(antlr4({parserDir, listenerDir, grammar, listener, rule, mode,
+      visitorDir, visitor}));
+};
+
+gulp.task('stream', gulp.series(generate, stream));
 gulp.task('run', gulp.series(generate, run));
 gulp.task('default', generate);

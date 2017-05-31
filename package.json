@@ -29,9 +29,10 @@
   "homepage": "https://github.com/jlenoble/gulp-antlr4#readme",
   "dependencies": {
     "antlr4": "^4.7.0",
+    "child-process-data": "^0.5.3",
     "gulp-util": "*",
-    "through2": "*",
-    "child-process-data": "^0.5.3"
+    "stream-to-array": "^2.3.0",
+    "through2": "*"
   },
   "devDependencies": {
     "autoreload-gulp": "*",

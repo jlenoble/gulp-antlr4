@@ -1,3 +1,5 @@
+import toArray from 'stream-to-array';
+import {Buffer} from 'buffer';
 import {PluginError} from 'gulp-util';
 import through from 'through2';
 import path from 'path';
@@ -22,8 +24,14 @@ export default function (_options) {
     }
 
     if (file.isStream()) {
-      this.emit('error', new PluginError(PLUGIN_NAME,
-        'Streams not supported (yet)!'));
+      toArray(file.contents)
+        .then(parts => {
+          consumeData({
+            data: Buffer.concat(parts).toString(encoding),
+            ANTLR4, mode,
+            ctx: this,
+          });
+        });
     } else if (file.isBuffer()) {
       const inputFile = file.history[0];
 
@@ -48,8 +56,11 @@ export default function (_options) {
 
       default:
         if (ANTLR4.isProperlySetup()) {
-          const data = file.contents.toString('utf8');
-          consumeData({data, ANTLR4, mode, ctx: this});
+          consumeData({
+            data: file.contents.toString('utf8'),
+            ANTLR4, mode,
+            ctx: this,
+          });
         }
       }
     }
