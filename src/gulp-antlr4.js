@@ -7,6 +7,7 @@ import {spawn} from 'child_process';
 import childProcessData from 'child-process-data';
 import {InputStream, CommonTokenStream} from 'antlr4';
 import {ParseTreeWalker} from 'antlr4/tree';
+import checkJava from './check-java';
 
 const PLUGIN_NAME = 'gulp-antlr4';
 
@@ -65,26 +66,6 @@ export default function (_options) {
       }
     }
   });
-}
-
-function checkJava () {
-  const CLASSPATH = process.env.CLASSPATH;
-
-  if (!CLASSPATH) {
-    throw new PluginError(PLUGIN_NAME,
-      new ReferenceError(`Environment variable CLASSPATH is not defined;
-Java is not installed or is improperly set`));
-  }
-
-  // Not matching '~' as it is not understood by Java anyway
-  const matchJar = CLASSPATH.match(
-    /.*:((\d|\w|\/|-|_|\.)+antlr-\d+\.\d+-complete\.jar):.*/);
-
-  if (matchJar === null) {
-    throw new PluginError(PLUGIN_NAME,
-      new ReferenceError(`Cannot find ANTLR4 .jar file;
-It should appear in your CLASSPATH`));
-  }
 }
 
 function formatOptions (options) {
