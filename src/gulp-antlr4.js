@@ -25,12 +25,10 @@ export default function (options) {
     }
 
     if (file.isBuffer()) {
-      switch (path.extname(file.path).toLowerCase()) {
-      case '.g4':
+      if (path.extname(file.path).toLowerCase() === '.g4') {
         mustRequireAfresh = true;
         return makeParserFiles(file, callback);
-
-      default:
+      } else {
         dataFiles.push(file);
         return callback(null, file);
       }
