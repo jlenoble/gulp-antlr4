@@ -6,6 +6,8 @@ import formatOptions from './format-options';
 import makeParser from './make-parser';
 import consumeData from './consume-data';
 
+const PLUGIN_NAME = 'gulp-antlr4';
+
 export default function (options) {
   checkJava();
 
