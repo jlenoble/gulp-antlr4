@@ -1,5 +1,7 @@
 import {PluginError} from 'gulp-util';
 
+const PLUGIN_NAME = 'gulp-antlr4';
+
 export default function checkJava () {
   const CLASSPATH = process.env.CLASSPATH;
 

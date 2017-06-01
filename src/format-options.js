@@ -1,5 +1,7 @@
 import path from 'path';
 
+const PLUGIN_NAME = 'gulp-antlr4';
+
 export default function formatOptions (options) {
   let opts;
 
