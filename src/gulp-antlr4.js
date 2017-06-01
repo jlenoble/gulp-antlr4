@@ -9,7 +9,7 @@ import consumeData from './consume-data';
 export default function (options) {
   checkJava();
 
-  const {parserDir, mode, ANTLR4} = formatOptions(options);
+  const {parserDir, mode, ANTLR4, sync} = formatOptions(options);
   const dataFiles = [];
   const makeParserFiles = makeParser(parserDir, mode);
   let mustRequireAfresh = false;
@@ -44,13 +44,34 @@ export default function (options) {
       }
     } else {
       if (ANTLR4.isProperlySetup()) {
-        dataFiles.forEach(file => {
-          consumeData({
-            data: file.contents.toString('utf8'),
-            ANTLR4, mode,
-            ctx: this,
+        if (sync) {
+          dataFiles.forEach(file => {
+            try {
+              consumeData({
+                data: file.contents.toString('utf8'), ANTLR4, mode,
+              });
+              this.push(file);
+            } catch (err) {
+              callback(new PluginError(PLUGIN_NAME, err));
+            }
           });
-        });
+
+          callback(null);
+        } else {
+          dataFiles.reduce((promise, file) => {
+            return promise.then(() => consumeData({
+              data: file.contents.toString('utf8'), ANTLR4, mode,
+            }).then(() => {
+              this.push(file);
+            }), err => {
+              callback(new PluginError(PLUGIN_NAME, err));
+            });
+          }, Promise.resolve()).then(() => {
+            callback(null);
+          }, err => {
+            callback(new PluginError(PLUGIN_NAME, err));
+          });
+        }
       } else {
         callback(new PluginError(PLUGIN_NAME,
           'Options are incomplete or inconsistent'));

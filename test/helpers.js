@@ -30,54 +30,32 @@ export const testGrammar = _options => {
 };
 
 export const runGrammar = _options => {
+  const args = [
+    '--gulpfile',
+    'test/gulpfiles/gulpfile.babel.js',
+    '--grammar',
+    _options.grammarName,
+    '--output',
+    _options.outputDir || outputDir,
+    '--input',
+    _options.inputFile,
+    '--rule',
+    _options.startRule,
+    '--mode',
+    _options.antlrMode,
+    '--listener',
+    _options.listenerName,
+    '--visitor',
+    _options.visitorName,
+    'run',
+  ];
+
+  if (!_options.sync) {
+    args.push('--async');
+  }
+
   const options = Object.assign({
-    childProcess: ['gulp', [
-      '--gulpfile',
-      'test/gulpfiles/gulpfile.babel.js',
-      '--grammar',
-      _options.grammarName,
-      '--output',
-      _options.outputDir || outputDir,
-      '--input',
-      _options.inputFile,
-      '--rule',
-      _options.startRule,
-      '--mode',
-      _options.antlrMode,
-      '--listener',
-      _options.listenerName,
-      '--visitor',
-      _options.visitorName,
-      'run',
-    ]],
-  }, _options);
-
-  const test = makeSingleTest(options);
-
-  return test();
-};
-
-export const streamGrammar = _options => {
-  const options = Object.assign({
-    childProcess: ['gulp', [
-      '--gulpfile',
-      'test/gulpfiles/gulpfile.babel.js',
-      '--grammar',
-      _options.grammarName,
-      '--output',
-      _options.outputDir || outputDir,
-      '--input',
-      _options.inputFile,
-      '--rule',
-      _options.startRule,
-      '--mode',
-      _options.antlrMode,
-      '--listener',
-      _options.listenerName,
-      '--visitor',
-      _options.visitorName,
-      'stream',
-    ]],
+    childProcess: ['gulp', args],
   }, _options);
 
   const test = makeSingleTest(options);

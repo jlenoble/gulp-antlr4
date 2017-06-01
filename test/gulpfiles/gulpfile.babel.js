@@ -18,6 +18,7 @@ const sourcesDir = '../sources';
 const mode = processArgv(argv.mode);
 const listener = processArgv(argv.listener);
 const visitor = processArgv(argv.visitor);
+const sync = !processArgv(argv.async);
 
 const grammarGlob = [`${sourcesDir}/${grammar || '*'}.g4`];
 const inputGlob = [`${sourcesDir}/${inputFile || '*.txt'}`];
@@ -34,15 +35,8 @@ const generate = () => {
 const run = () => {
   return gulp.src(inputGlob, {since: gulp.lastRun(run)})
     .pipe(antlr4({parserDir, listenerDir, grammar, listener, rule, mode,
-      visitorDir, visitor}));
+      visitorDir, visitor, sync}));
 };
 
-const stream = () => {
-  return gulp.src(inputGlob, {buffer: false})
-    .pipe(antlr4({parserDir, listenerDir, grammar, listener, rule, mode,
-      visitorDir, visitor}));
-};
-
-gulp.task('stream', gulp.series(generate, stream));
 gulp.task('run', gulp.series(generate, run));
 gulp.task('default', generate);

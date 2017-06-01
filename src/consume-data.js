@@ -1,45 +1,18 @@
-import {PluginError} from 'gulp-util';
 import {InputStream, CommonTokenStream} from 'antlr4';
 import {ParseTreeWalker} from 'antlr4/tree';
 
-const PLUGIN_NAME = 'gulp-antlr4';
-
-export default function consumeData ({data, ANTLR4, ctx, mode}) {
+export default function consumeData ({data, ANTLR4, mode}) {
   const {tree, parser} = buildTree(data, ANTLR4);
 
   switch (mode) {
   case 'tree':
-    console.log(tree.toStringTree(parser.ruleNames));
-    return;
+    return handleTree(tree, parser);
 
   case 'listener':
-    new Promise((resolve, reject) => {
-      const walker = new ParseTreeWalker();
-      const listener = new ANTLR4.Listener(resolve, reject);
-      walker.walk(listener, tree);
-    }).then(() => {
-      ctx.emit('finish');
-    }, err => {
-      ctx.emit('error', new PluginError(PLUGIN_NAME, err));
-    });
-    return;
+    return handleListener(tree, ANTLR4);
 
   case 'visitor':
-    try {
-      const visitor = new ANTLR4.Visitor();
-
-      Promise
-        .resolve(visitor.visit(tree))
-        .then(() => {
-          ctx.emit('finish');
-        });
-
-      return; // Don't use callback but rely on above Promise
-      // to emit eventually the proper 'finish' event
-    } catch (err) {
-      ctx.emit('error', new PluginError(PLUGIN_NAME, err));
-    }
-    break;
+    return handleVisitor(tree, ANTLR4);
   }
 }
 
@@ -52,4 +25,20 @@ function buildTree (data, ANTLR4) {
   const tree = parser[ANTLR4.rule]();
 
   return {tree, parser};
+}
+
+function handleTree (tree, parser) {
+  console.log(tree.toStringTree(parser.ruleNames));
+}
+
+function handleListener (tree, ANTLR4) {
+  const walker = new ParseTreeWalker();
+  const listener = new ANTLR4.Listener();
+  walker.walk(listener, tree);
+  return listener;
+}
+
+function handleVisitor (tree, ANTLR4) {
+  const visitor = new ANTLR4.Visitor();
+  return visitor.visit(tree);
 }

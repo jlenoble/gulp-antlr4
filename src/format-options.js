@@ -17,8 +17,9 @@ export default function formatOptions (options) {
   const parserDir = getParserDir(opts);
   const mode = getMode(opts);
   const ANTLR4 = getClasses(opts);
+  const sync = opts.sync === true || true;
 
-  return {parserDir, mode, ANTLR4};
+  return {parserDir, mode, ANTLR4, sync};
 }
 
 function getParserDir (options) {
