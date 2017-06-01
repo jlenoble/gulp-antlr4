@@ -1,14 +1,13 @@
-import toArray from 'stream-to-array';
-import {Buffer} from 'buffer';
+/* import toArray from 'stream-to-array';
+import {Buffer} from 'buffer';*/
 import {PluginError} from 'gulp-util';
 import through from 'through2';
 import path from 'path';
-import {spawn} from 'child_process';
-import childProcessData from 'child-process-data';
 import {InputStream, CommonTokenStream} from 'antlr4';
 import {ParseTreeWalker} from 'antlr4/tree';
 import checkJava from './check-java';
 import formatOptions from './format-options';
+import makeParser from './make-parser';
 
 const PLUGIN_NAME = 'gulp-antlr4';
 
@@ -16,6 +15,9 @@ export default function (options) {
   checkJava();
 
   const {parserDir, mode, ANTLR4} = formatOptions(options);
+  const dataFiles = [];
+  const makeParserFiles = makeParser(parserDir, mode);
+  let mustRequireAfresh = false;
 
   return through.obj(function (file, encoding, callback) {
     if (file.isNull()) {
@@ -23,44 +25,40 @@ export default function (options) {
     }
 
     if (file.isStream()) {
-      toArray(file.contents)
-        .then(parts => {
-          consumeData({
-            data: Buffer.concat(parts).toString(encoding),
-            ANTLR4, mode,
-            ctx: this,
-          });
-        });
-    } else if (file.isBuffer()) {
-      const inputFile = file.history[0];
+      return callback(new PluginError(PLUGIN_NAME,
+        'Streams are not supported'));
+    }
 
-      switch (path.extname(inputFile)) {
+    if (file.isBuffer()) {
+      switch (path.extname(file.path).toLowerCase()) {
       case '.g4':
-        const args = ['org.antlr.v4.Tool', '-Dlanguage=JavaScript', '-o',
-          parserDir];
-        if (mode === 'visitor' || mode === 'both') {
-          args.push('-visitor');
-        }
-        if (mode !== 'listener' && mode !== 'both') {
-          args.push('-no-listener');
-        }
-        args.push(inputFile);
-        return childProcessData(spawn('java', args))
-        .then(() => {
-          callback(null, file);
-        }, err => {
-          this.emit('error', new PluginError(PLUGIN_NAME, err));
-          callback(null, file);
-        });
+        mustRequireAfresh = true;
+        return makeParserFiles(file, callback);
 
       default:
-        if (ANTLR4.isProperlySetup()) {
+        dataFiles.push(file);
+        return callback(null, file);
+      }
+    }
+  }, function (callback) {
+    if (mustRequireAfresh) {
+      if (dataFiles.length > 0) {
+        callback(new PluginError(PLUGIN_NAME, 'Cannot require afresh yet'));
+      } else {
+        callback(null);
+      }
+    } else {
+      if (ANTLR4.isProperlySetup()) {
+        dataFiles.forEach(file => {
           consumeData({
             data: file.contents.toString('utf8'),
             ANTLR4, mode,
             ctx: this,
           });
-        }
+        });
+      } else {
+        callback(new PluginError(PLUGIN_NAME,
+          'Options are incomplete or inconsistent'));
       }
     }
   });
