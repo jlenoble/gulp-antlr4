@@ -41,7 +41,7 @@
     "babel-preset-es2016": "*",
     "babel-preset-es2017": "*",
     "chai": "*",
-    "child-process-data": "*",
+    "child-process-data": "^0.5.4",
     "cleanup-wrapper": "^0.2.3",
     "del": "*",
     "eslint-config-google": "*",
