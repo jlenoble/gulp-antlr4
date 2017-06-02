@@ -38,5 +38,12 @@ const run = () => {
       visitorDir, visitor, sync}));
 };
 
+const mixed = () => {
+  return gulp.src(inputGlob.concat(grammarGlob), {since: gulp.lastRun(mixed)})
+    .pipe(antlr4({parserDir, listenerDir, grammar, listener, rule, mode,
+      visitorDir, visitor, sync}));
+};
+
+gulp.task('mixed', mixed);
 gulp.task('run', gulp.series(generate, run));
 gulp.task('default', generate);

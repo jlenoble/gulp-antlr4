@@ -75,8 +75,9 @@ function getClasses (options) {
     Listener: getListener(options),
     Visitor: getVisitor(options),
     isProperlySetup () {
-      return true;
+      return this.Lexer && typeof this.Lexer === 'function';
     },
+    requireAfresh: getClasses.bind(null, options),
   };
 }
 
@@ -136,5 +137,9 @@ function requireAfresh (name, dir) {
     delete require.cache[file];
   }
 
-  return require(file)[name];
+  try {
+    return require(file)[name];
+  } catch (err) {
+    // Simply postpone requirement, hoping for some grammar in stream
+  }
 }

@@ -62,3 +62,37 @@ export const runGrammar = _options => {
 
   return test();
 };
+
+export const runMixedWithGrammar = _options => {
+  const args = [
+    '--gulpfile',
+    'test/gulpfiles/gulpfile.babel.js',
+    '--grammar',
+    _options.grammarName,
+    '--output',
+    _options.outputDir || outputDir,
+    '--input',
+    _options.inputFile,
+    '--rule',
+    _options.startRule,
+    '--mode',
+    _options.antlrMode,
+    '--listener',
+    _options.listenerName,
+    '--visitor',
+    _options.visitorName,
+    'mixed',
+  ];
+
+  if (!_options.sync) {
+    args.push('--async');
+  }
+
+  const options = Object.assign({
+    childProcess: ['gulp', args],
+  }, _options);
+
+  const test = makeSingleTest(options);
+
+  return test();
+};
