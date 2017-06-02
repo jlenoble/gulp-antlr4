@@ -17,7 +17,7 @@ export default function formatOptions (options) {
   const parserDir = getParserDir(opts);
   const mode = getMode(opts);
   const ANTLR4 = getClasses(opts);
-  const sync = opts.sync === true || true;
+  const sync = opts.sync === undefined ? true : !!opts.sync;
 
   return {parserDir, mode, ANTLR4, sync};
 }

@@ -58,7 +58,7 @@ export default function (options) {
             consumeData({
               data: file.contents.toString('utf8'),
               ANTLR4: refreshedANTLR4,
-              mode,
+              mode, sync,
             });
 
             file.contents = new Buffer(muter.getLogs()); // eslint-disable-line
@@ -74,16 +74,25 @@ export default function (options) {
 
         callback(null);
       } else {
-        dataFiles.reduce((promise, file) => {
-          return promise.then(() => consumeData({
+        const muter = Muter(process.stdout, 'write');
+
+        const consumeFile = captured(muter, file => {
+          return consumeData({
             data: file.contents.toString('utf8'),
             ANTLR4: refreshedANTLR4,
-            mode,
+            mode, sync,
           }).then(() => {
+            file.contents = new Buffer(muter.getLogs()); // eslint-disable-line
+            muter.forget();
+
             this.push(file);
-          }), err => {
+          }, err => {
             callback(new PluginError(PLUGIN_NAME, err));
           });
+        });
+
+        dataFiles.reduce((promise, file) => {
+          return promise.then(() => consumeFile(file));
         }, Promise.resolve()).then(() => {
           callback(null);
         }, err => {

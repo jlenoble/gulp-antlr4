@@ -71,4 +71,71 @@ describe('Testing Gulp plugin gulp-antlr4: Downstream', function () {
       },
     });
   }));
+
+  it(`Writing to disc (async translator)`,
+  tmpDir(outputDir, function () {
+    return runGrammar({
+      grammarName: 'ArrayInit',
+      inputFile: 'data3.txt',
+      outputDir: outputDir,
+      startRule: 'init',
+      listenerName: 'AsyncShortToUnicodeString',
+      dest: outputDir,
+      sync: false,
+
+      checkResults (results) {
+        return expectEventuallyFound(`${outputDir}/data3.txt`)
+          .then(() => {
+            return new Promise((resolve, reject) => {
+              fs.readFile(`${outputDir}/data3.txt`, (err, data) => {
+                if (err) {
+                  return reject(err);
+                }
+
+                try {
+                  expect(data.toString('utf8')).to.equal(
+                    '\\u0063\\u0003\\u01c3');
+                  resolve();
+                } catch (err) {
+                  reject(err);
+                }
+              });
+            });
+          });
+      },
+    });
+  }));
+
+  it(`Logging to disc (async interpreter)`,
+  tmpDir(outputDir, function () {
+    return runGrammar({
+      grammarName: 'Calc',
+      inputFile: 'data4.txt',
+      outputDir: outputDir,
+      startRule: 'prog',
+      visitorName: 'AsyncEvalVisitor',
+      dest: outputDir,
+      sync: false,
+
+      checkResults (results) {
+        return expectEventuallyFound(`${outputDir}/data4.txt`)
+          .then(() => {
+            return new Promise((resolve, reject) => {
+              fs.readFile(`${outputDir}/data4.txt`, (err, data) => {
+                if (err) {
+                  return reject(err);
+                }
+
+                try {
+                  expect(data.toString('utf8')).to.equal('42424242\n');
+                  resolve();
+                } catch (err) {
+                  reject(err);
+                }
+              });
+            });
+          });
+      },
+    });
+  }));
 });

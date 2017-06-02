@@ -52,7 +52,7 @@ export const runGrammar = _options => {
     'run',
   ];
 
-  if (!_options.sync) {
+  if (_options.sync !== undefined && !_options.sync) {
     args.push('--async');
   }
 
@@ -88,7 +88,7 @@ export const runMixedWithGrammar = _options => {
     'mixed',
   ];
 
-  if (!_options.sync) {
+  if (_options.sync !== undefined && !_options.sync) {
     args.push('--async');
   }
 
