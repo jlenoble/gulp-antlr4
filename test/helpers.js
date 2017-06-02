@@ -47,6 +47,8 @@ export const runGrammar = _options => {
     _options.listenerName,
     '--visitor',
     _options.visitorName,
+    '--dest',
+    _options.dest,
     'run',
   ];
 
@@ -81,6 +83,8 @@ export const runMixedWithGrammar = _options => {
     _options.listenerName,
     '--visitor',
     _options.visitorName,
+    '--dest',
+    _options.dest,
     'mixed',
   ];
 

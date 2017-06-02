@@ -31,6 +31,7 @@
     "antlr4": "^4.7.0",
     "child-process-data": "^0.5.3",
     "gulp-util": "*",
+    "muter": "^0.6.0",
     "stream-to-array": "^2.3.0",
     "through2": "*"
   },
@@ -54,7 +55,6 @@
     "gulp-sourcemaps": "*",
     "gulp-wrap": "*",
     "markdown-include": "*",
-    "muter": "*",
     "plumb-gulp": "*",
     "stat-again": "^0.2.0"
   },

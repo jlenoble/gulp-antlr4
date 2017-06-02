@@ -1,6 +1,7 @@
 import {PluginError} from 'gulp-util';
 import through from 'through2';
 import path from 'path';
+import Muter, {captured} from 'muter';
 import checkJava from './check-java';
 import formatOptions from './format-options';
 import makeParser from './make-parser';
@@ -32,7 +33,7 @@ export default function (options) {
         return makeParserFiles(file, callback);
       } else {
         dataFiles.push(file);
-        return callback(null, file);
+        return callback(null);
       }
     }
   }, function (callback) {
@@ -50,18 +51,26 @@ export default function (options) {
 
     if (refreshedANTLR4.isProperlySetup()) {
       if (sync) {
-        dataFiles.forEach(file => {
+        const muter = Muter(process.stdout, 'write');
+
+        const consumeFile = captured(muter, file => {
           try {
             consumeData({
               data: file.contents.toString('utf8'),
               ANTLR4: refreshedANTLR4,
               mode,
             });
+
+            file.contents = new Buffer(muter.getLogs()); // eslint-disable-line
+            muter.forget();
+
             this.push(file);
           } catch (err) {
             callback(new PluginError(PLUGIN_NAME, err));
           }
         });
+
+        dataFiles.forEach(consumeFile);
 
         callback(null);
       } else {
