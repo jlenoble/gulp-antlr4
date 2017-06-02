@@ -14,6 +14,7 @@ describe('Testing Gulp plugin gulp-antlr4 asynchronously', function () {
       outputDir: outputDir,
       startRule: 'init',
       listenerName: 'AsyncShortToUnicodeString',
+      sync: false,
 
       checkResults (results) {
         return expectEventuallyFound(`${outputDir}/ArrayInitListener.js`)
