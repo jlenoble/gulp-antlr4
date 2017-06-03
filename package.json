@@ -29,34 +29,31 @@
   "homepage": "https://github.com/jlenoble/gulp-antlr4#readme",
   "dependencies": {
     "antlr4": "^4.7.0",
-    "child-process-data": "^0.5.3",
-    "gulp-util": "*",
-    "muter": "^0.6.0",
-    "stream-to-array": "^2.3.0",
-    "through2": "*"
+    "child-process-data": "^0.5.4",
+    "muter": "^0.6.0"
   },
   "devDependencies": {
-    "autoreload-gulp": "*",
-    "babel-plugin-add-module-exports": "*",
-    "babel-preset-es2015": "*",
-    "babel-preset-es2016": "*",
-    "babel-preset-es2017": "*",
-    "chai": "*",
-    "child-process-data": "^0.5.4",
+    "autoreload-gulp": "^0.2.1",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2016": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
+    "chai": "^4.0.1",
     "cleanup-wrapper": "^0.2.3",
-    "del": "*",
-    "eslint-config-google": "*",
+    "del": "^2.2.2",
+    "eslint-config-google": "^0.8.0",
     "gulp": "git://github.com/gulpjs/gulp.git#4.0",
-    "gulp-babel": "*",
-    "gulp-eslint": "*",
-    "gulp-mocha": "*",
-    "gulp-rename": "*",
-    "gulp-replace": "*",
-    "gulp-sourcemaps": "*",
-    "gulp-wrap": "*",
-    "markdown-include": "*",
-    "plumb-gulp": "*",
-    "stat-again": "^0.2.0"
+    "gulp-babel": "^6.1.2",
+    "gulp-eslint": "^3.0.1",
+    "gulp-mocha": "^4.3.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-wrap": "^0.13.0",
+    "markdown-include": "^0.4.3",
+    "plumb-gulp": "^0.1.0"
   },
-  "peerDependencies": {}
+  "peerDependencies": {
+    "gulp-util": "^3.0.8",
+    "through2": "^2.0.3"
+  }
 }
