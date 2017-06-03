@@ -50,7 +50,9 @@
     "gulp-replace": "^0.5.4",
     "gulp-wrap": "^0.13.0",
     "markdown-include": "^0.4.3",
-    "plumb-gulp": "^0.1.0"
+    "plumb-gulp": "^0.1.0",
+    "stat-again": "^0.2.0",
+    "yargs": "^8.0.1"
   },
   "peerDependencies": {
     "gulp-util": "^3.0.8",
