@@ -2,13 +2,13 @@
 
 First you should get familiar with [ANTLR4](http://www.antlr.org/) and how to write grammars. This plugin won't save you from getting fluent with that powerhouse of a tool.
 
-But once you've done that, you will be able to make exitingly complex transforms of your files.
+But once you've done that, you will be able to make excitingly complex transforms of your files.
 
 ANTLR4 comes with a [Javascript runtime](https://github.com/antlr/antlr4/tree/master/runtime/JavaScript), but the documentation on the web is almost exclusively in a JAVA context. This Gulp plugin aims at eliminating all frictions in the Javascript context between your grammars and your intents.
 
 The normal Gulp way is to source your data files and get downstream your translations or your interpretations. Just point the plugin to your custom translator or your custom visitor and it will do the rest.
 
-But the plugin can also recognize your grammar files and generate for you the base parser/lexer files from which you will derive your translator/visitor. You need for that [Java installed](https://www.java.com/fr/download/) and the [antlr4 Jar installed](https://github.com/antlr/antlr4/blob/master/doc/getting-started.md). The plugin will refuse to work if your environment is not properly set up, since if you can't generate anew from your updated grammars, you can't develop any ANTLR4 application anyway.
+But the plugin can also recognize your grammar files and generate for you the base parser/lexer files from which you will derive your translator/visitor. You need for that [Java installed](https://www.java.com/fr/download/) and the [ANTLR4 Jar installed](https://github.com/antlr/antlr4/blob/master/doc/getting-started.md). The plugin will refuse to work if your environment is not properly set up, since if you can't generate anew from your updated grammars, you can't develop any ANTLR4 application anyway.
 
 ## Usage !heading
 
