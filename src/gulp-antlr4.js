@@ -100,7 +100,7 @@ export default function (options) {
         });
       }
     } else {
-      callback(new PluginError(PLUGIN_NAME,
+      callback(new PluginError(PLUGIN_NAME, refreshedANTLR4.getError() ||
         'Options are incomplete or inconsistent'));
     }
   });

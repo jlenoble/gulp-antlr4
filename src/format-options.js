@@ -75,7 +75,18 @@ function getClasses (options) {
     Listener: getListener(options),
     Visitor: getVisitor(options),
     isProperlySetup () {
-      return this.Lexer && typeof this.Lexer === 'function';
+      return this.Lexer && typeof this.Lexer === 'function' &&
+        this.Parser && typeof this.Parser === 'function' &&
+        (!options.listener || (this.Listener &&
+          typeof this.Listener === 'function')) &&
+        (!options.visitor || (this.Visitor &&
+          typeof this.Visitor === 'function'));
+    },
+    getError () {
+      return this.Lexer instanceof Error && this.Lexer ||
+        this.Parser instanceof Error && this.Parser ||
+        this.Listener instanceof Error && this.Listener ||
+        this.Visitor instanceof Error && this.Visitor;
     },
     requireAfresh: getClasses.bind(null, options),
   };
@@ -140,6 +151,7 @@ function requireAfresh (name, dir) {
   try {
     return require(file)[name];
   } catch (err) {
+    return err;
     // Simply postpone requirement, hoping for some grammar in stream
   }
 }
