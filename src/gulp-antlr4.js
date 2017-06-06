@@ -92,7 +92,10 @@ export default function (options) {
         });
 
         dataFiles.reduce((promise, file) => {
-          return promise.then(() => consumeFile(file));
+          return promise.then(
+            () => consumeFile(file),
+            err => callback(err)
+          );
         }, Promise.resolve()).then(() => {
           callback(null);
         }, err => {
