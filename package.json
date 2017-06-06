@@ -29,7 +29,7 @@
   "homepage": "https://github.com/jlenoble/gulp-antlr4#readme",
   "dependencies": {
     "antlr4": "^4.7.0",
-    "child-process-data": "^0.5.4",
+    "child-process-data": "^0.5.5",
     "muter": "^0.6.0"
   },
   "devDependencies": {
