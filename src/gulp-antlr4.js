@@ -17,26 +17,32 @@ export default function (options) {
   const makeParserFiles = makeParser(parserDir, mode);
   let mustRequireAfresh = !ANTLR4.isProperlySetup();
 
-  return through.obj(function (file, encoding, callback) {
+  return through.obj(function (file, encoding, done) {
     if (file.isNull()) {
-      return callback(null, file);
+      return done(null, file);
     }
 
     if (file.isStream()) {
-      return callback(new PluginError(PLUGIN_NAME,
+      this.emit('error', new PluginError(PLUGIN_NAME,
         'Streams are not supported'));
+      return done();
     }
 
     if (file.isBuffer()) {
       if (path.extname(file.path).toLowerCase() === '.g4') {
         mustRequireAfresh = true;
-        return makeParserFiles(file, callback);
+        return makeParserFiles(file).then(() => {
+          done(null, file);
+        }, err => {
+          this.emit('error', new PluginError(PLUGIN_NAME, err));
+          done();
+        });
       } else {
         dataFiles.push(file);
-        return callback(null);
+        return done();
       }
     }
-  }, function (callback) {
+  }, function (done) {
     let refreshedANTLR4 = ANTLR4;
 
     if (mustRequireAfresh) {
@@ -45,7 +51,7 @@ export default function (options) {
         refreshedANTLR4 = ANTLR4.requireAfresh();
       } else {
         // No data files, just already processed grammars, so return
-        return callback(null);
+        return done(null);
       }
     }
 
@@ -66,13 +72,14 @@ export default function (options) {
 
             this.push(file);
           } catch (err) {
-            callback(new PluginError(PLUGIN_NAME, err));
+            this.emit('error', new PluginError(PLUGIN_NAME, err));
+            done();
           }
         });
 
         dataFiles.forEach(consumeFile);
 
-        callback(null);
+        done(null);
       } else {
         const muter = Muter(process.stdout, 'write');
 
@@ -87,24 +94,28 @@ export default function (options) {
 
             this.push(file);
           }, err => {
-            callback(new PluginError(PLUGIN_NAME, err));
+            this.emit('error', new PluginError(PLUGIN_NAME, err));
+            done();
           });
         });
 
         dataFiles.reduce((promise, file) => {
           return promise.then(
             () => consumeFile(file),
-            err => callback(err)
+            err => done(err)
           );
         }, Promise.resolve()).then(() => {
-          callback(null);
+          done(null);
         }, err => {
-          callback(new PluginError(PLUGIN_NAME, err));
+          this.emit('error', new PluginError(PLUGIN_NAME, err));
+          done();
         });
       }
     } else {
-      callback(new PluginError(PLUGIN_NAME, refreshedANTLR4.getError() ||
-        'Options are incomplete or inconsistent'));
+      this.emit('error',
+        new PluginError(PLUGIN_NAME, refreshedANTLR4.getError() ||
+          'Options are incomplete or inconsistent'));
+      done();
     }
   });
 }
