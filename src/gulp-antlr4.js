@@ -9,15 +9,31 @@ import consumeData from './consume-data';
 
 const PLUGIN_NAME = 'gulp-antlr4';
 
-export default function (options) {
-  checkJava();
+export default function (_options) {
+  let options;
+  let confError;
 
-  const {parserDir, mode, ANTLR4, sync} = formatOptions(options);
+  try {
+    checkJava();
+    options = formatOptions(_options);
+  } catch (err) {
+    confError = new PluginError(PLUGIN_NAME, err);
+  }
+
+  const {parserDir, mode, ANTLR4, sync} = options;
   const dataFiles = [];
   const makeParserFiles = makeParser(parserDir, mode);
   let mustRequireAfresh = !ANTLR4.isProperlySetup();
 
   return through.obj(function (file, encoding, done) {
+    if (confError !== undefined) {
+      // Throw now and not in factory so as to be able to emit a loggable
+      // error instead of throwing an uncaught exception, which breaks
+      // gulp plumbing and TDD
+      this.emit('error', confError);
+      return done();
+    }
+
     if (file.isNull()) {
       return done(null, file);
     }
@@ -73,13 +89,13 @@ export default function (options) {
             this.push(file);
           } catch (err) {
             this.emit('error', new PluginError(PLUGIN_NAME, err));
-            done();
+            return done();
           }
         });
 
         dataFiles.forEach(consumeFile);
 
-        done(null);
+        return done();
       } else {
         const muter = Muter(process.stdout, 'write');
 
@@ -105,7 +121,7 @@ export default function (options) {
             err => done(err)
           );
         }, Promise.resolve()).then(() => {
-          done(null);
+          done();
         }, err => {
           this.emit('error', new PluginError(PLUGIN_NAME, err));
           done();
@@ -115,7 +131,7 @@ export default function (options) {
       this.emit('error',
         new PluginError(PLUGIN_NAME, refreshedANTLR4.getError() ||
           'Options are incomplete or inconsistent'));
-      done();
+      return done();
     }
   });
 }
