@@ -1,14 +1,9 @@
-import {PluginError} from 'gulp-util';
-
-const PLUGIN_NAME = 'gulp-antlr4';
-
 export default function checkJava () {
   const CLASSPATH = process.env.CLASSPATH;
 
   if (!CLASSPATH) {
-    throw new PluginError(PLUGIN_NAME,
-      new ReferenceError(`Environment variable CLASSPATH is not defined;
-Java is not installed or is improperly set`));
+    throw new ReferenceError(`Environment variable CLASSPATH is not defined;
+Java is not installed or is improperly set`);
   }
 
   // Not matching '~' as it is not understood by Java anyway
@@ -16,8 +11,7 @@ Java is not installed or is improperly set`));
     /.*:((\d|\w|\/|-|_|\.)+antlr-\d+\.\d+-complete\.jar):.*/);
 
   if (matchJar === null) {
-    throw new PluginError(PLUGIN_NAME,
-      new ReferenceError(`Cannot find ANTLR4 .jar file;
-It should appear in your CLASSPATH`));
+    throw new ReferenceError(`Cannot find ANTLR4 .jar file;
+It should appear in your CLASSPATH`);
   }
 }

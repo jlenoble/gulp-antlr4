@@ -1,7 +1,5 @@
 import path from 'path';
 
-const PLUGIN_NAME = 'gulp-antlr4';
-
 export default function formatOptions (options) {
   let opts;
 
@@ -26,9 +24,9 @@ function getParserDir (options) {
   const {parserDir} = options;
 
   if (typeof parserDir !== 'string') {
-    throw new PluginError(PLUGIN_NAME,
-      new TypeError(`You must provide the directory where to write or read
-     the generated lexing and parsing tools (option 'parserDir')`));
+    throw new TypeError(
+      `You must provide the directory where to write or read
+     the generated lexing and parsing tools (option 'parserDir')`);
   }
 
   return parserDir;
@@ -38,8 +36,7 @@ function getMode (options) {
   const {mode, listener, visitor} = options;
 
   if (typeof mode !== 'string' && mode !== undefined) {
-    throw new PluginError(PLUGIN_NAME,
-      new TypeError(`Bad option: ${mode}`));
+    throw new TypeError(`Bad option: ${mode}`);
   }
 
   if (listener && visitor) {
@@ -96,8 +93,7 @@ function getRule (options) {
   const {rule} = options;
 
   if (!rule) {
-    throw new PluginError(PLUGIN_NAME,
-      `Undefined starting rule (option 'rule')`);
+    throw new ReferenceError(`Undefined starting rule (option 'rule')`);
   }
 
   return rule;
