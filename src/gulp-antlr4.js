@@ -20,10 +20,10 @@ export default function (_options) {
     confError = new PluginError(PLUGIN_NAME, err);
   }
 
-  const {parserDir, mode, ANTLR4, sync} = options;
+  const {parserDir, mode, ANTLR4, sync} = options || {};
   const dataFiles = [];
   const makeParserFiles = makeParser(parserDir, mode);
-  let mustRequireAfresh = !ANTLR4.isProperlySetup();
+  let mustRequireAfresh = ANTLR4 && !ANTLR4.isProperlySetup();
 
   return through.obj(function (file, encoding, done) {
     if (confError !== undefined) {
