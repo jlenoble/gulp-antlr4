@@ -1,4 +1,4 @@
-import {PluginError} from 'gulp-util';
+import PluginError from 'plugin-error';
 import through from 'through2';
 import path from 'path';
 import Muter, {captured} from 'muter';
