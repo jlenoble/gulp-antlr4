@@ -1,6 +1,18 @@
 # Build
 build
 
+
+# Test
+tmp
+temp
+scratch
+
+# Dist
+lib
+
+# Hide
+private
+
 # Logs
 logs
 *.log

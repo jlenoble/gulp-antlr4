@@ -1,6 +1,6 @@
 import gulp from 'gulp';
 import mocha from 'gulp-mocha';
-import './build'
+import './build';
 
 const testGlob = [
   'build/test/**/*.test.js'

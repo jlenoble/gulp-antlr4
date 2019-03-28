@@ -1,36 +1,43 @@
 {
   "generator-wupjs": {
     "devDeps": {
-      "gulp": "git://github.com/gulpjs/gulp.git#4.0",
-      "plumb-gulp": "*",
-      "autoreload-gulp": "*",
-      "gulp-sourcemaps": "*",
-      "del": "*",
-      "gulp-rename": "*",
-      "gulp-replace": "*",
-      "gulp-wrap": "*",
-      "markdown-include": "*",
-      "chai": "*",
-      "babel-preset-es2017": "*",
-      "babel-preset-es2016": "*",
-      "babel-preset-es2015": "*",
-      "babel-plugin-add-module-exports": "*",
-      "gulp-babel": "*",
-      "gulp-eslint": "*",
-      "eslint-config-google": "*",
-      "gulp-mocha": "*",
-      "muter": "*",
-      "child-process-data": "*"
+      "gulp": "^4.0.0",
+      "plumb-gulp": "^0.1.0",
+      "autoreload-gulp": "^0.2.1",
+      "gulp-sourcemaps": "^2.6.5",
+      "del": "^3.0.0",
+      "gulp-rename": "^1.2.2",
+      "gulp-replace": "^0.6.1",
+      "gulp-wrap": "^0.13.0",
+      "markdown-include": "^0.4.3",
+      "chai": "^4.0.1",
+      "babel-plugin-add-module-exports": "^0.2.1",
+      "gulp-babel": "^7.0.0",
+      "gulp-eslint": "^4.0.0",
+      "eslint-config-google": "^0.9.1",
+      "gulp-mocha": "^6.0.0",
+      "child-process-data": "^0.5.7",
+      "@babel/core": "^7.4.0",
+      "@babel/register": "^7.4.0",
+      "@babel/preset-env": "^7.4.2",
+      "cleanup-wrapper": "^0.2.3",
+      "stat-again": "^0.2.0",
+      "yargs": "^10.0.3"
     },
-    "genVersion": "0.3.0",
-    "updated": "2017-04-30T19:04:57.481Z",
+    "genVersion": "0.5.1",
+    "updated": "2019-03-28T17:30:48.310Z",
     "created": "2017-04-30T19:00:44.688Z",
-    "version": "0.1.1",
+    "version": "0.4.5",
     "contributors": [],
-    "keywords": [],
+    "keywords": [
+      "gulpplugin",
+      "ANTLR4"
+    ],
     "deps": {
-      "gulp-util": "*",
-      "through2": "*"
+      "through2": "^2.0.3",
+      "antlr4": "^4.7.0",
+      "child-process-data": "^0.5.6",
+      "muter": "^0.7.0"
     },
     "peerDeps": {},
     "name": "gulp-antlr4",
@@ -40,13 +47,19 @@
     "github": "jlenoble",
     "preprocessors": [],
     "license": "MIT",
-    "babel": "es2017",
+    "babel": [
+      "env"
+    ],
     "linters": [
       "EsLint"
     ],
     "addons": [],
     "testRunners": [
       "Mocha"
+    ],
+    "main": "lib/gulp-antlr4.js",
+    "files": [
+      "lib"
     ]
   }
 }

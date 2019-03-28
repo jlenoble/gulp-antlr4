@@ -13,9 +13,12 @@
   "contributors": [],
   "license": "MIT",
   "engines": {
-    "node": ">=7.3.0"
+    "node": ">=10.9.0"
   },
   "main": "lib/gulp-antlr4.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "test": "gulp test"
   },
@@ -30,29 +33,32 @@
   "dependencies": {
     "antlr4": "^4.7.0",
     "child-process-data": "^0.5.6",
-    "gulp-util": "^3.0.8",
-    "muter": "^0.6.0",
+    "muter": "^0.7.0",
     "through2": "^2.0.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/register": "^7.4.0",
     "autoreload-gulp": "^0.2.1",
-    "babel-core": "^6.26.0",
     "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-env": "^1.6.1",
     "chai": "^4.0.1",
+    "child-process-data": "^0.5.7",
     "cleanup-wrapper": "^0.2.3",
     "del": "^3.0.0",
     "eslint-config-google": "^0.9.1",
-    "gulp": "git://github.com/gulpjs/gulp.git#4.0",
+    "gulp": "^4.0.0",
     "gulp-babel": "^7.0.0",
     "gulp-eslint": "^4.0.0",
-    "gulp-mocha": "^4.3.1",
+    "gulp-mocha": "^6.0.0",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.6.1",
+    "gulp-sourcemaps": "^2.6.5",
     "gulp-wrap": "^0.13.0",
     "markdown-include": "^0.4.3",
     "plumb-gulp": "^0.1.0",
     "stat-again": "^0.2.0",
     "yargs": "^10.0.3"
-  }
+  },
+  "peerDependencies": {}
 }

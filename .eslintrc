@@ -1,6 +1,6 @@
 {
   "parserOptions": {
-    "ecmaVersion": 2017,
+    "ecmaVersion": 2018,
     "sourceType": "module",
     "ecmaFeatures": {
     }
@@ -14,8 +14,6 @@
     "func-names": ["error", "never"],
     "indent": ["error", 2],
     "max-len": ["error", {"ignoreRegExpLiterals": true}],
-    "new-cap": ["off"],
-    "no-invalid-this": ["off"],
     "no-param-reassign": ["error", {"props": true}],
     "one-var": ["error", "never"],
     "quotes": ["error", "single", {"allowTemplateLiterals": true}],
