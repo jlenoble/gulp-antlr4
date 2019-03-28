@@ -13,7 +13,7 @@ export class AsyncEvalVisitor extends CalcVisitor {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         try {
-          const id = ctx.ID().getText();
+          const id = ctx.ID().getText(); // eslint-disable-line new-cap
           const value = this.visit(ctx.expr());
           this.variables[id] = value;
           resolve(value);
@@ -39,11 +39,11 @@ export class AsyncEvalVisitor extends CalcVisitor {
   }
 
   visitInt (ctx) {
-    return parseInt(ctx.INT().getText(), 10);
+    return parseInt(ctx.INT().getText(), 10); // eslint-disable-line new-cap
   }
 
   visitId (ctx) {
-    const id = ctx.ID().getText();
+    const id = ctx.ID().getText(); // eslint-disable-line new-cap
     if (this.variables[id]) {
       return this.variables[id];
     }

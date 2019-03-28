@@ -4,7 +4,7 @@ import {expectEventuallyFound, expectEventuallyDeleted} from 'stat-again';
 import {testGrammar, runGrammar, outputDir} from './helpers';
 
 describe('Testing Gulp plugin gulp-antlr4 with buffers', function () {
-  this.timeout('10000');
+  this.timeout('10000'); // eslint-disable-line no-invalid-this
 
   const checkResults = results => {
     const out = results.out();
@@ -35,9 +35,10 @@ describe('Testing Gulp plugin gulp-antlr4 with buffers', function () {
     };
 
     it(`Testing grammar ${grammarName}: listener`, tmpDir(outputDir,
-    function () {
-      return testGrammar({grammarName, checkResults, onSuccess});
-    }));
+      function () {
+        return testGrammar({grammarName, checkResults, onSuccess});
+      })
+    );
   });
 
   [
@@ -56,9 +57,11 @@ describe('Testing Gulp plugin gulp-antlr4 with buffers', function () {
     };
 
     it(`Testing grammar ${grammarName}: visitor`, tmpDir(outputDir,
-    function () {
-      return testGrammar({grammarName, checkResults, onSuccess, visitor: true});
-    }));
+      function () {
+        return testGrammar({grammarName, checkResults, onSuccess,
+          visitor: true});
+      })
+    );
   });
 
   [
@@ -77,10 +80,11 @@ describe('Testing Gulp plugin gulp-antlr4 with buffers', function () {
     };
 
     it(`Testing grammar ${grammarName}: both`, tmpDir(outputDir,
-    function () {
-      return testGrammar({grammarName, checkResults, onSuccess, visitor: true,
-        listener: true});
-    }));
+      function () {
+        return testGrammar({grammarName, checkResults, onSuccess, visitor: true,
+          listener: true});
+      })
+    );
   });
 
   it(`Running parser ArrayInit on good input`, tmpDir(outputDir, function () {
@@ -119,38 +123,40 @@ describe('Testing Gulp plugin gulp-antlr4 with buffers', function () {
   }));
 
   it(`Running ArrayInit with listener ShortToUnicodeString`,
-  tmpDir(outputDir, function () {
-    return runGrammar({
-      grammarName: 'ArrayInit',
-      inputFile: 'data3.txt',
-      outputDir: outputDir,
-      startRule: 'init',
-      listenerName: 'ShortToUnicodeString',
+    tmpDir(outputDir, function () {
+      return runGrammar({
+        grammarName: 'ArrayInit',
+        inputFile: 'data3.txt',
+        outputDir: outputDir,
+        startRule: 'init',
+        listenerName: 'ShortToUnicodeString',
 
-      checkResults (results) {
-        return expectEventuallyFound(`${outputDir}/ArrayInitListener.js`)
-          .then(() => {
-            expect(results.out()).to.match(/\\u0063\\u0003\\u01c3/);
-          });
-      },
-    });
-  }));
+        checkResults (results) {
+          return expectEventuallyFound(`${outputDir}/ArrayInitListener.js`)
+            .then(() => {
+              expect(results.out()).to.match(/\\u0063\\u0003\\u01c3/);
+            });
+        },
+      });
+    })
+  );
 
   it(`Running Calc with visitor EvalVisitor`,
-  tmpDir(outputDir, function () {
-    return runGrammar({
-      grammarName: 'Calc',
-      inputFile: 'data4.txt',
-      outputDir: outputDir,
-      startRule: 'prog',
-      visitorName: 'EvalVisitor',
+    tmpDir(outputDir, function () {
+      return runGrammar({
+        grammarName: 'Calc',
+        inputFile: 'data4.txt',
+        outputDir: outputDir,
+        startRule: 'prog',
+        visitorName: 'EvalVisitor',
 
-      checkResults (results) {
-        return expectEventuallyFound(`${outputDir}/CalcVisitor.js`)
-          .then(() => {
-            expect(results.out()).to.match(/42424242/);
-          });
-      },
-    });
-  }));
+        checkResults (results) {
+          return expectEventuallyFound(`${outputDir}/CalcVisitor.js`)
+            .then(() => {
+              expect(results.out()).to.match(/42424242/);
+            });
+        },
+      });
+    })
+  );
 });

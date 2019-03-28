@@ -10,7 +10,7 @@ export class EvalVisitor extends CalcVisitor {
   }
 
   visitAssign (ctx) {
-    const id = ctx.ID().getText();
+    const id = ctx.ID().getText(); // eslint-disable-line new-cap
     const value = this.visit(ctx.expr());
     this.variables[id] = value;
     return value;
@@ -23,11 +23,11 @@ export class EvalVisitor extends CalcVisitor {
   }
 
   visitInt (ctx) {
-    return parseInt(ctx.INT().getText(), 10);
+    return parseInt(ctx.INT().getText(), 10); // eslint-disable-line new-cap
   }
 
   visitId (ctx) {
-    const id = ctx.ID().getText();
+    const id = ctx.ID().getText(); // eslint-disable-line new-cap
     if (this.variables[id]) {
       return this.variables[id];
     }

@@ -13,6 +13,7 @@ export class ShortToUnicodeString extends ArrayInitListener {
   }
 
   enterValue (ctx) {
+    // eslint-disable-next-line new-cap
     const value = '0000' + parseInt(ctx.INT().getText(), 10).toString(16);
     process.stdout.write('\\u' + value.slice(-4));
   }

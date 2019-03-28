@@ -5,10 +5,9 @@ import {runGrammar, outputDir} from './helpers';
 import fs from 'fs';
 
 describe('Testing Gulp plugin gulp-antlr4: Downstream', function () {
-  this.timeout('10000');
+  this.timeout('10000'); // eslint-disable-line no-invalid-this
 
-  it(`Writing to disc (sync translator)`,
-  tmpDir(outputDir, function () {
+  it(`Writing to disc (sync translator)`, tmpDir(outputDir, function () {
     return runGrammar({
       grammarName: 'ArrayInit',
       inputFile: 'data3.txt',
@@ -40,8 +39,7 @@ describe('Testing Gulp plugin gulp-antlr4: Downstream', function () {
     });
   }));
 
-  it(`Logging to disc (sync interpreter)`,
-  tmpDir(outputDir, function () {
+  it(`Logging to disc (sync interpreter)`, tmpDir(outputDir, function () {
     return runGrammar({
       grammarName: 'Calc',
       inputFile: 'data4.txt',
@@ -72,8 +70,7 @@ describe('Testing Gulp plugin gulp-antlr4: Downstream', function () {
     });
   }));
 
-  it(`Writing to disc (async translator)`,
-  tmpDir(outputDir, function () {
+  it(`Writing to disc (async translator)`, tmpDir(outputDir, function () {
     return runGrammar({
       grammarName: 'ArrayInit',
       inputFile: 'data3.txt',
@@ -106,8 +103,7 @@ describe('Testing Gulp plugin gulp-antlr4: Downstream', function () {
     });
   }));
 
-  it(`Logging to disc (async interpreter)`,
-  tmpDir(outputDir, function () {
+  it(`Logging to disc (async interpreter)`, tmpDir(outputDir, function () {
     return runGrammar({
       grammarName: 'Calc',
       inputFile: 'data4.txt',

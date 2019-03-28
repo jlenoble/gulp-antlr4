@@ -30,7 +30,7 @@ export default function (_options) {
       // Throw now and not in factory so as to be able to emit a loggable
       // error instead of throwing an uncaught exception, which breaks
       // gulp plumbing and TDD
-      this.emit('error', confError);
+      this.emit('error', confError); // eslint-disable-line no-invalid-this
       return done();
     }
 
@@ -39,6 +39,7 @@ export default function (_options) {
     }
 
     if (file.isStream()) {
+      // eslint-disable-next-line no-invalid-this
       this.emit('error', new PluginError(PLUGIN_NAME,
         'Streams are not supported'));
       return done();
@@ -50,6 +51,7 @@ export default function (_options) {
         return makeParserFiles(file).then(() => {
           done(null, file);
         }, err => {
+          // eslint-disable-next-line no-invalid-this
           this.emit('error', new PluginError(PLUGIN_NAME, err));
           done();
         });
@@ -73,7 +75,7 @@ export default function (_options) {
 
     if (refreshedANTLR4.isProperlySetup()) {
       if (sync) {
-        const muter = Muter(process.stdout, 'write');
+        const muter = new Muter(process.stdout, 'write');
 
         const consumeFile = captured(muter, file => {
           try {
@@ -86,8 +88,9 @@ export default function (_options) {
             file.contents = Buffer.from(muter.getLogs()); // eslint-disable-line
             muter.forget();
 
-            this.push(file);
+            this.push(file); // eslint-disable-line no-invalid-this
           } catch (err) {
+            // eslint-disable-next-line no-invalid-this
             this.emit('error', new PluginError(PLUGIN_NAME, err));
             return done();
           }
@@ -97,7 +100,7 @@ export default function (_options) {
 
         return done();
       } else {
-        const muter = Muter(process.stdout, 'write');
+        const muter = new Muter(process.stdout, 'write');
 
         const consumeFile = captured(muter, file => {
           return consumeData({
@@ -108,8 +111,9 @@ export default function (_options) {
             file.contents = Buffer.from(muter.getLogs()); // eslint-disable-line
             muter.forget();
 
-            this.push(file);
+            this.push(file); // eslint-disable-line no-invalid-this
           }, err => {
+            // eslint-disable-next-line no-invalid-this
             this.emit('error', new PluginError(PLUGIN_NAME, err));
             done();
           });
@@ -123,12 +127,13 @@ export default function (_options) {
         }, Promise.resolve()).then(() => {
           done();
         }, err => {
+          // eslint-disable-next-line no-invalid-this
           this.emit('error', new PluginError(PLUGIN_NAME, err));
           done();
         });
       }
     } else {
-      this.emit('error',
+      this.emit('error', // eslint-disable-line no-invalid-this
         new PluginError(PLUGIN_NAME, refreshedANTLR4.getError() ||
           'Options are incomplete or inconsistent'));
       return done();
