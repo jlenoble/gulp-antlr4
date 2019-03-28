@@ -163,8 +163,10 @@ export const calculate = () => {
 gulp.task('calculate', gulp.series(makeParser, calculate));
 ```
 
+
 ## License
 
 gulp-antlr4 is [MIT licensed](./LICENSE).
 
-© 2017 [Jason Lenoble](mailto:jason.lenoble@gmail.com)
+© 2017-2019 [Jason Lenoble](mailto:jason.lenoble@gmail.com)
+
