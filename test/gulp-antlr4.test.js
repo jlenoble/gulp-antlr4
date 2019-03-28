@@ -9,7 +9,7 @@ describe('Testing Gulp plugin gulp-antlr4 with buffers', function () {
   const checkResults = results => {
     const out = results.out();
     [
-      /Requiring external module babel-register/,
+      /Requiring external module @babel\/register/,
       /Working directory changed to/,
       /Using gulpfile/,
       /Starting 'default'.../,
