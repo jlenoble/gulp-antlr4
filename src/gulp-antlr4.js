@@ -83,7 +83,7 @@ export default function (_options) {
               mode, sync,
             });
 
-            file.contents = new Buffer(muter.getLogs()); // eslint-disable-line
+            file.contents = Buffer.from(muter.getLogs()); // eslint-disable-line
             muter.forget();
 
             this.push(file);
@@ -105,7 +105,7 @@ export default function (_options) {
             ANTLR4: refreshedANTLR4,
             mode, sync,
           }).then(() => {
-            file.contents = new Buffer(muter.getLogs()); // eslint-disable-line
+            file.contents = Buffer.from(muter.getLogs()); // eslint-disable-line
             muter.forget();
 
             this.push(file);
